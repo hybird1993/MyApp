@@ -1,0 +1,54 @@
+@import '../setting.scss';
+
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  .column-item {
+    display: flex;
+    min-width: 200px;
+    .column-item-label {
+      display: flex;
+      height: $form-item-height;
+      align-items: center;
+      width: $form-label-width;
+      margin-right: 10px;
+      justify-content: $form-label-align;
+    }
+    .column-item-content {
+      flex: 1;
+      overflow: hidden;
+      flex-wrap: wrap;
+      .column-item-component {
+        height: $form-item-height;
+        display: flex;
+        align-items: center;
+      }
+      .column-item-error {
+        color: #ff3300;
+        font-size: 12px;
+        height: 20px;
+        line-height: 20px;
+        .column-item-error-msg {
+          span {
+            font-size: 12px;
+            display: block;
+            background: #ffffff;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: clip;
+          }
+        }
+      }
+      .column-item-text {
+        flex:1;
+        height:$form-item-height;
+        line-height: $form-item-height;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+

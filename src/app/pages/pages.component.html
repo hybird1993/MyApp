@@ -1,0 +1,8 @@
+<div>
+  <button nz-button nzType="primary" (click)="go('case')">{{title}}</button>
+  <div>
+    <button nz-button nzType="primary" (click)="changeLang('zh')">中文</button>
+    <button nz-button nzType="primary" (click)="changeLang('en')">English</button>
+  </div>
+</div>
+<router-outlet></router-outlet>

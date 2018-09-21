@@ -1,0 +1,17 @@
+<ul>
+  <ng-template ngFor [ngForOf]="datas" let-data let-i="index">
+    <li>
+      <div class="item">
+        <label nz-checkbox  [ngModel]="data.checked" [nzIndeterminate]="data.indeterminate" (ngModelChange)="checkboxChange($event,data.id)">
+        </label>
+        <span *ngIf="data.children">
+          <i class="anticon anticon-caret-right"  (click)="data.isCollapsed = !data.isCollapsed"  [class.tree-arrow-open]= "!data.isCollapsed"></i>
+        </span>
+        <span class="tree-item-title">{{data.title}}</span>
+      </div>
+      <div  *ngIf="data.children && !data.isCollapsed"  @fadeIn>
+        <app-tree  [datas]="data.children"></app-tree>
+      </div>
+    </li>
+  </ng-template>
+</ul>

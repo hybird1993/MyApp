@@ -1,23 +1,27 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {MaterialModule} from './material.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {HeroService} from '../../heroes/shared/hero.service';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {NgxExampleLibraryModule} from '@ismaestro/ngx-example-library';
+import {CommonModule} from '@angular/common';
+import {components} from './components';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgZorroAntdModule} from 'ng-zorro-antd';
 
 @NgModule({
   imports: [
-    MaterialModule,
-    FlexLayoutModule,
     TranslateModule,
-    NgxExampleLibraryModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgZorroAntdModule,
   ],
   exports: [
-    MaterialModule,
-    FlexLayoutModule,
     TranslateModule,
-    NgxExampleLibraryModule
-  ]
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgZorroAntdModule,
+    ...components,
+  ],
+  declarations: [...components]
 })
 
 export class SharedModule {
@@ -25,7 +29,6 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        HeroService
       ]
     };
   }

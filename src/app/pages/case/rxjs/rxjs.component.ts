@@ -1,7 +1,6 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {fromEvent, interval} from 'rxjs';
-import { map } from 'rxjs/operators';
-import {skip} from 'rxjs/internal/operators';
+import {delay, map, skip, timeInterval} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-rxjs',
@@ -11,7 +10,7 @@ import {skip} from 'rxjs/internal/operators';
 export class RxjsComponent implements OnInit {
 
   constructor(
-    private $eleRef: ElementRef
+    private $eleRef: ElementRef,
   ) { }
 
   ngOnInit() {
@@ -19,13 +18,13 @@ export class RxjsComponent implements OnInit {
     fromEvent(button, 'click').subscribe(event => {
       console.log(event)
       interval(1000).pipe(
-        skip(1)
+        skip(1),
+        delay(2000),
+        timeInterval()
       ).subscribe(num => {
           console.log(num);
-        });
+      });
     });
-    // const button = document.querySelector('button');
-    // console.log(button);
     // const click$ = fromEvent(button, 'click');
     // const interval$ = interval(1000);
     // console.log(click$);
@@ -34,8 +33,12 @@ export class RxjsComponent implements OnInit {
     //   return interval$;
     // }));
     //
-    // clicksToInterval$.subscribe(intervalObservable =>
-    //   console.log(intervalObservable)
+    // clicksToInterval$.subscribe(intervalObservable => {
+    //     console.log(intervalObservable);
+    //     intervalObservable.subscribe(num => {
+    //       console.log(num);
+    //     });
+    //   }
     // );
   }
 

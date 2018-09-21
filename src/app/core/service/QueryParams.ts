@@ -1,7 +1,5 @@
-import {CommonSetting} from "../utils/common-setting";
-
 export class QueryParams {
-    pageSize: number = CommonSetting.getTablePageSize();
+    pageSize: number = 10;
     pageNum: number = 1;
     sortItem?: string;
     sortWay?: string;

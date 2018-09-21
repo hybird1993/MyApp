@@ -26,27 +26,18 @@ export class BaseInterceptor implements HttpInterceptor {
         /*失败时重试2次，可自由设置*/
         retry(2),
         /*捕获响应错误*/
-        catchError(this.handleError)
-        // catchError((err: HttpErrorResponse) => this.handleData(err))
+        // catchError(this.handleError)
+         catchError((err: HttpErrorResponse) => this.handleData(err))
       );
   }
 
   private handleData(event: HttpResponse<any> | HttpErrorResponse): Observable<any> {
     // 业务处理：一些通用操作
-    switch (event.status) {
-      case 200:
-        if (event instanceof HttpResponse) {
-          const body: any = event.body;
-          if (body && body.rc === 3) {
-          }
-        }
-        break;
-      case 401: // 未登录状态码
-        this.$router.navigate(['/login'], {}).then(() => {});
-        break;
-      default:
-        return of(event);
+    if (event.status === 401) {
+      this.$router.navigate(['/login'], {}).then(() => {});
+    } else {
     }
+    return of(event);
   }
 
   private handleError(error: HttpErrorResponse) {

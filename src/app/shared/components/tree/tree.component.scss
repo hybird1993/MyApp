@@ -1,0 +1,26 @@
+ul {
+  background-color: white;
+  li {
+    margin-left: 10px;
+  }
+}
+
+.item {
+  height: 25px;
+  line-height: 25px;
+}
+
+.tree-item-title {
+  margin-left: 10px;
+}
+
+.tree-arrow-open {
+  transform: rotate(90deg);
+}
+
+.trans {
+  animation: all 5s;
+  -moz-animation: all 5s;	/* Firefox */
+  -webkit-animation: all 5s;	/* Safari 和 Chrome */
+  -o-animation: all 5s;	/* Opera */
+}

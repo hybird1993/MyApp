@@ -1,0 +1,59 @@
+<div>
+  <form [formGroup]="_formGroup">
+    <div class="form-container">
+      <ng-container *ngFor="let column of columns">
+        <div class="column-item" *ngIf="config[column.key]" [style.width]="column.width ? column.width:'100%'" >
+          <div class="column-item-label" [ngStyle]="column.labelStyle">
+          <span>
+            <em *ngIf="column.required" style="color: red;">*</em>
+                {{column.label}}
+                <nz-tooltip [nzTitle]="column.labelMsg" [nzPlacement]="'bottom'" *ngIf="column.labelMsg">
+                <span nz-tooltip><i class="anticon anticon-info-circle-o"></i></span>
+                </nz-tooltip>
+            </span>
+          </div>
+          <div class="column-item-content">
+            <div class="column-item-component" [ngSwitch]="column.type">
+              <!--<div [ngSwitch]="column.type">-->
+                <div *ngSwitchCase="'text'" class="column-item-text" [title]="data[column.key]">
+                  {{data[column.key]}}
+                </div>
+                <div *ngSwitchCase="'input'">
+                  <input nz-input
+                         placeholder="{{column.placeholder || lang.input_placeholder}}"
+                         formControlName="{{column.key}}"/>
+                </div>
+                <div *ngSwitchCase="'radio'">
+                  <nz-radio-group (ngModelChange)="modelChange(_formGroup.controls, $event, column.key)" formControlName="{{column.key}}">
+                    <ng-container *ngFor="let option of column.options">
+                      <label nz-radio [nzDisabled]="disabled || option.disabled" [nzValue]="option.value">{{option.label}}</label>
+                    </ng-container>
+                  </nz-radio-group>
+                </div>
+              <!--</div>-->
+              <ng-container *ngIf="column.suffix">
+                <div *ngIf="isString(column.suffix)" [innerHTML]="column.suffix"></div>
+                <ng-template *ngIf="!isString(column.suffix)" [ngTemplateOutlet]="column.suffix"></ng-template>
+              </ng-container>
+            </div>
+            <!-- 错误提示 -->
+            <div class="column-item-error">
+              <div *ngIf="!_formGroup.controls[column.key].valid && (_formGroup.controls[column.key].dirty || _formGroup.controls[column.key].touched ||(data[column.key] != null && data[column.key] != undefined))">
+                <ng-container *ngFor="let rule of column.rules">
+                  <div class="column-item-error-msg" *ngIf="_formGroup.controls[column.key].hasError(rule.code)">
+                    <span>{{rule.msg}}</span>
+                  </div>
+                </ng-container>
+                <ng-container *ngFor="let rule of column.asyncRules">
+                  <div class="column-error-msg" *ngIf="_formGroup.controls[column.key].hasError(rule.asyncCode)">
+                    <span>{{rule.msg}}</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>

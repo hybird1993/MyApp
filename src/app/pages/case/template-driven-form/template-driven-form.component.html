@@ -1,0 +1,55 @@
+<form novalidate #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <div>
+    <label>
+      <span>Full name</span>
+      <input
+        type="text"
+        name="name"
+        placeholder="Your full name"
+        [ngModel]="user.name"
+        (ngModelChange)="user.name = $event"
+        required
+      maxlength="2">
+    </label>
+    <div *ngIf="f.controls.name.errors.required" class="error">
+      Name is required
+    </div>
+    <div *ngIf="f.controls.name.errors.maxlength" class="error">
+      Name maxlength is 2
+    </div>
+  </div>
+  <div ngModelGroup="account" #userEmail="ngModelGroup">
+    <div>
+      <label>
+        <span>Email address</span>
+        <input
+          type="email"
+          name="email"
+          placeholder="Your email address"
+          [(ngModel)]="user.account.email"
+          required>
+      </label>
+    </div>
+    <div>
+      <label>
+        <span>Confirm address</span>
+        <input
+          type="email"
+          name="confirm"
+          placeholder="Confirm your email address"
+          [(ngModel)]="user.account.confirm"
+          required>
+      </label>
+    </div>
+    <div *ngIf="userEmail.invalid && userEmail.touched" class="error">
+      Both emails are required
+    </div>
+  </div>
+  <button type="submit">Sign up</button>{{f.invalid}}
+  <div>
+    {{ f.value | json }}
+  </div>
+  <div>
+    {{user | json}}
+  </div>
+</form>
