@@ -25,7 +25,8 @@ export class CaseComponent implements OnInit {
       .subscribe(() => {
         this.setDatas();
       });
-    this.btns = ['reactive-form', 'template-driven-form', 'my-form', 'rxjs', 'http', 'marker-map', 'typescript'];
+    this.btns = ['reactive-form', 'template-driven-form', 'my-form', 'rxjs', 'http',
+      'marker-map', 'typescript', 'lodash', 'life-circle', 'pipe'];
   }
 
   /**
