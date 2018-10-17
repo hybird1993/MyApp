@@ -7,6 +7,9 @@ import {RxjsComponent} from './rxjs/rxjs.component';
 import {HttpComponent} from './http/http.component';
 import {MarkerMapComponent} from './marker-map/marker-map.component';
 import {TypescriptComponent} from './typescript/typescript.component';
+import {LodashComponent} from './lodash/lodash.component';
+import {LifeCircleComponent} from './life-circle/life-circle.component';
+import {PipeComponent} from './pipe/pipe.component';
 
 export const routes: Routes = [
   {
@@ -41,4 +44,16 @@ export const routes: Routes = [
     path: 'typescript',
     component: TypescriptComponent
   },
+  {
+    path: 'lodash',
+    component: LodashComponent
+  },
+  {
+    path: 'life-circle',
+    component: LifeCircleComponent,
+  },
+  {
+    path: 'pipe',
+    component: PipeComponent,
+  }
 ];

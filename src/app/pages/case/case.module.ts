@@ -10,6 +10,10 @@ import { RxjsComponent } from './rxjs/rxjs.component';
 import { HttpComponent } from './http/http.component';
 import { MarkerMapComponent } from './marker-map/marker-map.component';
 import { TypescriptComponent } from './typescript/typescript.component';
+import { LodashComponent } from './lodash/lodash.component';
+import { LifeCircleComponent } from './life-circle/life-circle.component';
+import { PipeComponent } from './pipe/pipe.component';
+import { ChildComponent } from './life-circle/child/child.component';
 
 @NgModule({
   imports: [
@@ -25,6 +29,10 @@ import { TypescriptComponent } from './typescript/typescript.component';
     HttpComponent,
     MarkerMapComponent,
     TypescriptComponent,
+    LodashComponent,
+    LifeCircleComponent,
+    PipeComponent,
+    ChildComponent,
   ],
   providers: [],
   exports: []
