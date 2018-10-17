@@ -3,3 +3,7 @@
 @import '~ng-easyui/themes/material/easyui.css';
 @import '~ng-easyui/themes/angular.css';
 @import '~ng-easyui/themes/icon.css';
+
+.bg-r {
+  color: red;
+}
