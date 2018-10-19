@@ -56,4 +56,14 @@
       </ng-container>
     </div>
   </form>
+  <div class="btn-container">
+    <ng-content select="button"></ng-content>
+    <button *ngFor="let btn of buttons"
+            nz-button  class="form-btn"
+            [nzType]="btn.type || 'default'"
+            [nzLoading]="btn.isLoading"
+            [disabled]="btn.check && !_formGroup.valid"
+            (click)="btn.event">{{btn.text}}</button>
+  </div>
 </div>
+

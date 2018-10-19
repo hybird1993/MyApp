@@ -10,7 +10,6 @@ export class BaseInterceptor implements HttpInterceptor {
     private $router: Router,
   ) {
   }
-
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log(req);
     const token = localStorage.getItem('authorization');
@@ -26,8 +25,9 @@ export class BaseInterceptor implements HttpInterceptor {
         /*失败时重试2次，可自由设置*/
         retry(2),
         /*捕获响应错误*/
-        // catchError(this.handleError)
-         catchError((err: HttpErrorResponse) => this.handleData(err))
+         catchError(this._handleError)
+        // catchError((err: HttpErrorResponse) => this.handleError(err))
+        // catchError((err: HttpErrorResponse) => this.handleData(err))
       );
   }
 
@@ -46,6 +46,31 @@ export class BaseInterceptor implements HttpInterceptor {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
     } else {
+      if (error.status === 401) {
+        console.log(this)
+        this.$router.navigate(['/login'], {}).then(() => {});
+      }
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  }
+
+  private _handleError = (error: HttpErrorResponse) => {
+    console.log(error);
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      if (error.status === 401) {
+        console.log(this)
+        this.$router.navigate(['/login'], {}).then(() => {});
+      }
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
       console.error(

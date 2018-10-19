@@ -1,5 +1,6 @@
 {
- "loading": "loading",
+  "loading": "loading",
+  "menu-case": "case",
   "choose1": "choose1",
   "choose2": "choose2",
   "input_placeholder": "Please enter"

@@ -13,7 +13,10 @@ export class AppGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    // this.$router.navigate(['/login'], {}).then(() => {});
-    return true;
+      const auth = localStorage.getItem('auth');
+      if (!auth) {
+        // this.$router.navigate(['/login'], {}).then(() => {});
+      }
+      return true;
   }
 }

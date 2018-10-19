@@ -14,6 +14,7 @@ import { LodashComponent } from './lodash/lodash.component';
 import { LifeCircleComponent } from './life-circle/life-circle.component';
 import { PipeComponent } from './pipe/pipe.component';
 import { ChildComponent } from './life-circle/child/child.component';
+import { ToolComponent } from './tool/tool.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { ChildComponent } from './life-circle/child/child.component';
     LifeCircleComponent,
     PipeComponent,
     ChildComponent,
+    ToolComponent,
   ],
   providers: [],
   exports: []

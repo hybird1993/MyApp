@@ -11,6 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class FormComponent implements OnInit {
   @Input() columns: FormPropsConfig[] = [];
+  @Input() buttons = [];
   @Input() data = {};
   @Input() disabled: boolean = false;
   @Output() getData = new EventEmitter();
@@ -21,8 +22,9 @@ export class FormComponent implements OnInit {
     input_placeholder: ''
   };
 
-  constructor(public translateService: TranslateService,) {
-    // this.setDefaultLang();
+  constructor(public translateService: TranslateService,
+  ) {
+    this.setDefaultLang();
   }
 
   ngOnInit() {

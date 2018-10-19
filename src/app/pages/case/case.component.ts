@@ -29,16 +29,6 @@ export class CaseComponent implements OnInit {
       'marker-map', 'typescript', 'lodash', 'life-circle', 'pipe'];
   }
 
-  /**
-   * 改变语音
-   * @param lang
-   */
-  changeLang(lang) {
-    console.log(lang);
-    this.translateService.setDefaultLang(lang);
-    this.translateService.use(lang);
-  }
-
   setDatas() {
     // 方法一
     // this.datas = [

@@ -1,23 +1,37 @@
-import {AfterContentInit, Component, OnInit, SimpleChanges} from '@angular/core';
+import {
+  AfterContentInit, Component, OnInit, OnChanges, SimpleChanges, Input, AfterContentChecked, TemplateRef,
+  ViewChild, AfterViewInit
+} from '@angular/core';
 
 @Component({
   selector: 'app-child',
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.scss']
 })
-export class ChildComponent implements OnInit, AfterContentInit {
-
+export class ChildComponent implements OnInit, OnChanges, AfterContentInit, AfterContentChecked, AfterViewInit {
+  @Input() aa;
+  @ViewChild('tpl') tpl: TemplateRef<any>;
   constructor() { }
 
   ngOnInit() {
-    console.log('child: OnInit');
+    console.dir(this.tpl);
+    console.log('child: OnInit...');
   }
 
   ngAfterContentInit() {
-    console.log('child: AfterContentInit');
+    console.log('child: AfterContentInit...');
   }
 
-  ngOnChange(changes: SimpleChanges) {
+  ngAfterContentChecked() {
+    console.log('child: AfterContentChecked...');
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('child: OnChanges...');
+  }
+
+  ngAfterViewInit() {
+    console.log('child: AfterViewInit...');
+    console.dir(this.tpl);
   }
 }
