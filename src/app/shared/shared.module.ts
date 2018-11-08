@@ -4,6 +4,7 @@ import {CommonModule} from '@angular/common';
 import {components} from './components';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgZorroAntdModule} from 'ng-zorro-antd';
+import {FormFactory} from './components/form/form.props.config';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import {NgZorroAntdModule} from 'ng-zorro-antd';
     NgZorroAntdModule,
     ...components,
   ],
+  providers: [FormFactory],
   declarations: [...components]
 })
 

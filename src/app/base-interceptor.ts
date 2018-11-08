@@ -47,7 +47,6 @@ export class BaseInterceptor implements HttpInterceptor {
       console.error('An error occurred:', error.error.message);
     } else {
       if (error.status === 401) {
-        console.log(this)
         this.$router.navigate(['/login'], {}).then(() => {});
       }
       // The backend returned an unsuccessful response code.
@@ -68,7 +67,6 @@ export class BaseInterceptor implements HttpInterceptor {
       console.error('An error occurred:', error.error.message);
     } else {
       if (error.status === 401) {
-        console.log(this)
         this.$router.navigate(['/login'], {}).then(() => {});
       }
       // The backend returned an unsuccessful response code.

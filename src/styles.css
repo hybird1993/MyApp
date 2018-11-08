@@ -7,3 +7,19 @@
 .bg-r {
   color: red;
 }
+
+/**
+修改input的placeholder的样式
+ */
+input::-webkit-input-placeholder {  /* Webkit Browsers */
+  font-size: 12px;
+}
+input:-moz-placeholder {   /* Mozilla Firefox 4-18 */
+  font-size: 12px;
+}
+input::-moz-placeholder {  /* Mozilla Firefox 19+ */
+  font-size: 12px;
+}
+input:-ms-input-placeholder {  /* Internet Explore 10+ */
+  font-size: 12px;
+}

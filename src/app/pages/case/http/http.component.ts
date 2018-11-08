@@ -16,7 +16,7 @@ export class HttpComponent implements OnInit {
   }
 
   getData() {
-    this.$service.getUserList().then(result => {
+    this.$service.getUsersList().then(result => {
       console.log(result);
     });
   }

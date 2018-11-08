@@ -1,13 +1,27 @@
-import {Component, HostBinding, HostListener, OnInit} from '@angular/core';
+import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, DoCheck, HostBinding, HostListener, OnInit} from '@angular/core';
+
+// export enum ChangeDetectionStrategy {
+//   OnPush, // 表示变化检测对象的状态为`CheckOnce`
+//   Default, // 表示变化检测对象的状态为`CheckAlways`
+// }
 
 @Component({
   selector: 'app-pipe',
   templateUrl: './pipe.component.html',
-  styleUrls: ['./pipe.component.scss']
+  styleUrls: ['./pipe.component.scss'],
+  // 设置该组件的变化检测策略为onPush
+ // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PipeComponent implements OnInit {
+export class PipeComponent implements OnInit, DoCheck, AfterViewInit {
   greeting: Promise<string>|null = null;
   arrived: boolean = false;
+
+  aa: '';
+
+  _show = true;
+  showObj = {
+    show: this.show()
+  }
 
   private resolve: Function|null = null;
   @HostBinding('class.bg-r') bgIsRed = false;
@@ -19,11 +33,19 @@ export class PipeComponent implements OnInit {
     this.bgIsRed = false;
   }
 
-  constructor() {
+  constructor(
+    public cd: ChangeDetectorRef
+  ) {
+  //  this.cd.detach();
     this.reset();
   }
 
   ngOnInit() {
+  }
+
+  ngDoCheck() {
+    console.log(this._show, '_show');
+    console.log(this.aa)
   }
   reset() {
     this.arrived = false;
@@ -37,5 +59,14 @@ export class PipeComponent implements OnInit {
       this.resolve('hi there!');
       this.arrived = true;
     }
+  }
+
+  show() {
+    console.log(11);
+    return true;
+  }
+
+  ngAfterViewInit() {
+  //  this.cd.detach();
   }
 }

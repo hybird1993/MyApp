@@ -7,6 +7,7 @@ export const routes: Routes = [
     component: PagesComponent,
     children: [
       { path: 'case', loadChildren: './case#CaseModule' },
+      { path: 'user', loadChildren: './user#UserModule' },
     ]
   },
 ];

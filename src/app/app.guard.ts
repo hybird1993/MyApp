@@ -15,7 +15,7 @@ export class AppGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const auth = localStorage.getItem('auth');
       if (!auth) {
-        // this.$router.navigate(['/login'], {}).then(() => {});
+        this.$router.navigate(['/login'], {}).then(() => {});
       }
       return true;
   }

@@ -10,7 +10,7 @@ export class TypescriptComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.test3();
+    this.test4();
   }
   // 扩展接口
   test1() {
@@ -83,5 +83,13 @@ export class TypescriptComponent implements OnInit {
 
     sam.move();
     tom.move(34);
+  }
+
+  test4() {
+    class A {
+      a: string;
+    }
+    let obj = new A();
+    console.log(obj instanceof A);
   }
 }

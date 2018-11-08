@@ -9,7 +9,7 @@ import {Router} from '@angular/router';
 })
 export class CaseComponent implements OnInit {
  datas = [
- ]
+ ];
 
  btns = [];
 

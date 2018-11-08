@@ -10,13 +10,12 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
-  @Input() columns: FormPropsConfig[] = [];
+  @Input() config: FormPropsConfig;
   @Input() buttons = [];
   @Input() data = {};
   @Input() disabled: boolean = false;
   @Output() getData = new EventEmitter();
-  _columns = [];
-  config = {};
+  _items = [];
   _formGroup: FormGroup = new FormGroup({});
   lang = {
     input_placeholder: ''
@@ -28,12 +27,21 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._columns = this.columns;
-    this.columns.forEach(column => {
-      const columnValue = this.data[column.key] === 0 ? 0 : this.data[column.key] || '';
-      const $control = new FormControl(columnValue, this.addRuleControl(column.rules), this.addAsyncControl(column.asyncRules));
-      this.config[column.key] = true;
-      this._formGroup.addControl(column.key, $control);
+    this.config.getFormGroup = () => {
+      return this._formGroup;
+    };
+    this.config.getData = () => {
+      return this._formGroup.value;
+    };
+    this.config.getFormValid = () => {
+      return this._formGroup.valid === true;
+    };
+    console.log(this.config)
+    console.log(this.config.items)
+    this.config.items.forEach(item => {
+      const itemValue = this.data[item.key] === 0 ? 0 : this.data[item.key] || '';
+      const $control = new FormControl(itemValue, this.addRuleControl(item.rules), this.addAsyncControl(item.asyncRules));
+      this._formGroup.addControl(item.key, $control);
     });
     console.log(this._formGroup);
     this.translateService.onLangChange
@@ -57,7 +65,6 @@ export class FormComponent implements OnInit {
   }
 
   removeItem(key) {
-    this.config[key] = false;
     this._formGroup.removeControl(key);
   }
 

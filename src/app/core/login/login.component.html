@@ -1,29 +1,23 @@
-<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
-  <nz-form-item>
-    <nz-form-control>
-      <nz-input-group nzPrefixIcon="anticon anticon-user">
-        <input type="text" nz-input formControlName="userName" placeholder="Username">
-      </nz-input-group>
-      <nz-form-explain *ngIf="validateForm.get('userName').dirty && validateForm.get('userName').errors">Please input your username!</nz-form-explain>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control>
-      <nz-input-group nzPrefixIcon="anticon anticon-lock">
-        <input type="password" nz-input formControlName="password" placeholder="Password">
-      </nz-input-group>
-      <nz-form-explain *ngIf="validateForm.get('password').dirty && validateForm.get('password').errors">Please input your Password!</nz-form-explain>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control>
-      <label nz-checkbox formControlName="remember">
-        <span>Remember me</span>
-      </label>
-      <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
-      <button nz-button class="login-form-button" [nzType]="'primary'">Log in</button>
-      Or
-      <a href="">register now!</a>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+<div class="main-container">
+  <button class="trans"><p class="slideShine">Other men live to eat<br> while I eat to live.</p></button>
+  <div class="circle-group">
+    <div class="circle-container circle1">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container circle2">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container circle3">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-container circle4">
+      <div class="circle"></div>
+    </div>
+  </div>
+  <div class="login-container">
+    <div class="login-title">用户登录</div>
+    <l-form class="login-form" [config]="config" [data]="data">
+      <button nz-button class="login-btn" [nzType]="'primary'" (click)="login()">登录</button>
+    </l-form>
+  </div>
+</div>

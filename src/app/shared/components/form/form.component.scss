@@ -3,10 +3,10 @@
 .form-container {
   display: flex;
   flex-wrap: wrap;
-  .column-item {
+  .item-item {
     display: flex;
     min-width: 200px;
-    .column-item-label {
+    .item-item-label {
       display: flex;
       height: $form-item-height;
       align-items: center;
@@ -14,21 +14,21 @@
       margin-right: 10px;
       justify-content: $form-label-align;
     }
-    .column-item-content {
+    .item-item-content {
       flex: 1;
       overflow: hidden;
       flex-wrap: wrap;
-      .column-item-component {
+      .item-item-component {
         height: $form-item-height;
         display: flex;
         align-items: center;
       }
-      .column-item-error {
+      .item-item-error {
         color: #ff3300;
         font-size: 12px;
         height: 20px;
         line-height: 20px;
-        .column-item-error-msg {
+        .item-item-error-msg {
           span {
             font-size: 12px;
             display: block;
@@ -39,7 +39,7 @@
           }
         }
       }
-      .column-item-text {
+      .item-item-text {
         flex:1;
         height:$form-item-height;
         line-height: $form-item-height;

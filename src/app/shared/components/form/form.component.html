@@ -1,51 +1,61 @@
 <div>
   <form [formGroup]="_formGroup">
     <div class="form-container">
-      <ng-container *ngFor="let column of columns">
-        <div class="column-item" *ngIf="config[column.key]" [style.width]="column.width ? column.width:'100%'" >
-          <div class="column-item-label" [ngStyle]="column.labelStyle">
-          <span>
-            <em *ngIf="column.required" style="color: red;">*</em>
-                {{column.label}}
-                <nz-tooltip [nzTitle]="column.labelMsg" [nzPlacement]="'bottom'" *ngIf="column.labelMsg">
+      <ng-container *ngFor="let item of config.items">
+        <div class="item-item" [style.width]="item.width ? item.width: '100%'">
+          <div *ngIf="!item.removeLabel" class="item-item-label" [ngStyle]="item.labelStyle">
+            <span>
+              <em *ngIf="item.required" style="color: red;">*</em>
+                {{item.label}}
+                <nz-tooltip [nzTitle]="item.labelMsg" [nzPlacement]="'bottom'" *ngIf="item.labelMsg">
                 <span nz-tooltip><i class="anticon anticon-info-circle-o"></i></span>
                 </nz-tooltip>
             </span>
           </div>
-          <div class="column-item-content">
-            <div class="column-item-component" [ngSwitch]="column.type">
-              <!--<div [ngSwitch]="column.type">-->
-                <div *ngSwitchCase="'text'" class="column-item-text" [title]="data[column.key]">
-                  {{data[column.key]}}
-                </div>
-                <div *ngSwitchCase="'input'">
-                  <input nz-input
-                         placeholder="{{column.placeholder || lang.input_placeholder}}"
-                         formControlName="{{column.key}}"/>
-                </div>
-                <div *ngSwitchCase="'radio'">
-                  <nz-radio-group (ngModelChange)="modelChange(_formGroup.controls, $event, column.key)" formControlName="{{column.key}}">
-                    <ng-container *ngFor="let option of column.options">
-                      <label nz-radio [nzDisabled]="disabled || option.disabled" [nzValue]="option.value">{{option.label}}</label>
-                    </ng-container>
-                  </nz-radio-group>
-                </div>
-              <!--</div>-->
-              <ng-container *ngIf="column.suffix">
-                <div *ngIf="isString(column.suffix)" [innerHTML]="column.suffix"></div>
-                <ng-template *ngIf="!isString(column.suffix)" [ngTemplateOutlet]="column.suffix"></ng-template>
+          <div class="item-item-content">
+            <div class="item-item-component" [ngSwitch]="item.type">
+              <div *ngSwitchCase="'text'" class="item-item-text" [title]="data[item.key]">
+                {{data[item.key]}}
+              </div>
+              <div *ngSwitchCase="'input'">
+                <input nz-input autocomplete="off"
+                       [style.width]="item.inputWith || '160px'"
+                       placeholder="{{item.placeholder || lang.input_placeholder}}"
+                       formControlName="{{item.key}}"/>
+              </div>
+              <div *ngSwitchCase="'password'">
+                <input nz-input autocomplete="off"
+                       [style.width]="item.inputWith || '160px'"
+                       type="password"
+                       placeholder="{{item.placeholder || lang.input_placeholder}}"
+                       formControlName="{{item.key}}"/>
+              </div>
+              <div *ngSwitchCase="'radio'">
+                <nz-radio-group (ngModelChange)="modelChange(_formGroup.controls, $event, item.key)"
+                                formControlName="{{item.key}}">
+                  <ng-container *ngFor="let option of item.options">
+                    <label nz-radio [nzDisabled]="disabled || option.disabled"
+                           [nzValue]="option.value">{{option.label}}</label>
+                  </ng-container>
+                </nz-radio-group>
+              </div>
+              <ng-container *ngIf="item.suffix">
+                <div *ngIf="isString(item.suffix)" [innerHTML]="item.suffix"></div>
+                <ng-template *ngIf="!isString(item.suffix)" [ngTemplateOutlet]="item.suffix"></ng-template>
               </ng-container>
+              <i nz-icon class="anticon anticon-loading anticon-spin" style="margin-left: -20px;" *ngIf="_formGroup.controls[item.key].pending"></i>
             </div>
             <!-- 错误提示 -->
-            <div class="column-item-error">
-              <div *ngIf="!_formGroup.controls[column.key].valid && (_formGroup.controls[column.key].dirty || _formGroup.controls[column.key].touched ||(data[column.key] != null && data[column.key] != undefined))">
-                <ng-container *ngFor="let rule of column.rules">
-                  <div class="column-item-error-msg" *ngIf="_formGroup.controls[column.key].hasError(rule.code)">
+            <div class="item-item-error">
+              <div
+                *ngIf="!_formGroup.controls[item.key].valid && (_formGroup.controls[item.key].dirty || _formGroup.controls[item.key].touched ||(data[item.key] != null && data[item.key] != undefined))">
+                <ng-container *ngFor="let rule of item.rules">
+                  <div class="item-item-error-msg" *ngIf="_formGroup.controls[item.key].hasError(rule.code)">
                     <span>{{rule.msg}}</span>
                   </div>
                 </ng-container>
-                <ng-container *ngFor="let rule of column.asyncRules">
-                  <div class="column-error-msg" *ngIf="_formGroup.controls[column.key].hasError(rule.asyncCode)">
+                <ng-container *ngFor="let rule of item.asyncRules">
+                  <div class="item-error-msg" *ngIf="_formGroup.controls[item.key].hasError(rule.asyncCode)">
                     <span>{{rule.msg}}</span>
                   </div>
                 </ng-container>
@@ -59,11 +69,11 @@
   <div class="btn-container">
     <ng-content select="button"></ng-content>
     <button *ngFor="let btn of buttons"
-            nz-button  class="form-btn"
+            nz-button class="form-btn"
             [nzType]="btn.type || 'default'"
             [nzLoading]="btn.isLoading"
             [disabled]="btn.check && !_formGroup.valid"
-            (click)="btn.event">{{btn.text}}</button>
+            (click)="btn.clickEvent()">{{btn.text}}
+    </button>
   </div>
 </div>
-

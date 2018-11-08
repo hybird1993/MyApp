@@ -16,6 +16,14 @@
         <span title><i class="anticon anticon-mail"></i>{{case}}</span>
       </li>
       <li nz-submenu>
+        <span title><i class="anticon anticon-setting"></i>用户管理</span>
+        <ul>
+          <li nz-menu-item (click)="go('user/list')">用户列表</li>
+          <li nz-menu-item>Option 10</li>
+          <li nz-menu-item>Option 11</li>
+        </ul>
+      </li>
+      <li nz-submenu>
         <span title><i class="anticon anticon-mail"></i> Navigation One</span>
         <ul>
           <li nz-menu-group>
@@ -46,14 +54,6 @@
               <li nz-menu-item>Option 8</li>
             </ul>
           </li>
-        </ul>
-      </li>
-      <li nz-submenu>
-        <span title><i class="anticon anticon-setting"></i> Navigation Three</span>
-        <ul>
-          <li nz-menu-item>Option 9</li>
-          <li nz-menu-item>Option 10</li>
-          <li nz-menu-item>Option 11</li>
         </ul>
       </li>
     </ul>
