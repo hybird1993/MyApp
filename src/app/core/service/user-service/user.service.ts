@@ -21,7 +21,7 @@ export class UserService implements UserInterface {
     });
   }
 
-  login(name, password): Promise<Result<any>> {
+  login(name: string, password: string): Promise<Result<any>> {
     return new Promise((resolve, reject) => {
       this.$http.post('/api/user/login', {name, password}).subscribe((result: Result<any>) => {
         result.code === 0 ? resolve(result) : reject(result);
@@ -37,9 +37,25 @@ export class UserService implements UserInterface {
     });
   }
 
-  checkUserExist(username): Promise<Result<any>> {
+  checkUserExist(username: string): Promise<Result<any>> {
     return new Promise((resolve, reject) => {
       this.$http.get(`/api/user/checkUserName/${username}`).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
+  loginOut(): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.get(`/api/user/loginOut`).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
+  modify(params: User): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.post(`/api/user/modify`, User).subscribe((result: Result<any>) => {
         result.code === 0 ? resolve(result) : reject(result);
       });
     });

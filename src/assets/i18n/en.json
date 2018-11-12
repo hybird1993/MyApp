@@ -1,7 +1,11 @@
 {
   "loading": "loading",
-  "menu-case": "case",
+  "menu-case": "Case",
   "choose1": "choose1",
   "choose2": "choose2",
-  "input_placeholder": "Please enter"
+  "input_placeholder": "Please enter",
+  "user.userManager": "User Manager",
+  "user.userList": "User List",
+  "add": "Add",
+  "username": "username"
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../../core/service/user-service/user.service';
 import {NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-list',
@@ -10,14 +11,46 @@ import {Router} from '@angular/router';
 })
 export class UserListComponent implements OnInit {
   dataSet = [];
+  add;
+  allChecked = false;
+  indeterminate = false;
+  listOfSelection = [
+    {
+      text    : 'Select All Row',
+      onSelect: () => {
+        this.checkAll(true);
+      }
+    },
+    {
+      text    : 'Select Odd Row',
+      onSelect: () => {
+        this.dataSet.forEach((data, index) => data.checked = index % 2 !== 0);
+        this.refreshStatus();
+      }
+    },
+    {
+      text    : 'Select Even Row',
+      onSelect: () => {
+        this.dataSet.forEach((data, index) => data.checked = index % 2 === 0);
+        this.refreshStatus();
+      }
+    }
+  ];
+
   constructor(
     private $service: UserService,
     private $message: NzMessageService,
     private $router: Router,
+    public translateService: TranslateService,
   ) { }
 
   ngOnInit(): void {
     this.getData();
+    this.add = this.translateService.instant('add');
+    this.translateService.onLangChange
+      .subscribe(() => {
+        this.add = this.translateService.instant('add');
+      });
   }
 
   getData() {
@@ -45,4 +78,17 @@ export class UserListComponent implements OnInit {
   go(url) {
     this.$router.navigate([url]);
   }
+
+  refreshStatus(): void {
+    const allChecked = this.dataSet.every(value => value.checked === true);
+    const allUnChecked = this.dataSet.every(value => !value.checked);
+    this.allChecked = allChecked;
+    this.indeterminate = (!allChecked) && (!allUnChecked);
+  }
+
+  checkAll(value: boolean): void {
+    this.dataSet.forEach(data => data.checked = value);
+    this.refreshStatus();
+  }
+
 }

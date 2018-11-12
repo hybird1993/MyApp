@@ -29,4 +29,18 @@ export  interface  UserInterface {
    * @returns {Promise<Result<any>>}
    */
   checkUserExist(username: string): Promise<Result<any>>;
+
+  /**
+   * 退出登录
+   * @returns {Promise<Result<any>>}
+   */
+  loginOut(): Promise<Result<any>>;
+
+  /**
+   * 修改资料
+   * @param {User} params
+   * @returns {Promise<Result<any>>}
+   */
+
+  modify(params: User): Promise<Result<any>>;
 }

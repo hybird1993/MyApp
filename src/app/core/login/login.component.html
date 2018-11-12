@@ -19,5 +19,9 @@
     <l-form class="login-form" [config]="config" [data]="data">
       <button nz-button class="login-btn" [nzType]="'primary'" (click)="login()">登录</button>
     </l-form>
+    <nz-radio-group [(ngModel)]="lang" (ngModelChange)="setDefaultLang()">
+      <label nz-radio nzValue="zh">中文</label>
+      <label nz-radio nzValue="en">English</label>
+    </nz-radio-group>
   </div>
 </div>

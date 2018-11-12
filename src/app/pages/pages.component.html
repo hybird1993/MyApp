@@ -6,7 +6,23 @@
       <label nz-radio nzValue="zh">中文</label>
       <label nz-radio nzValue="en">English</label>
     </nz-radio-group>
-    <nz-avatar [nzText]="text" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>
+    <nz-dropdown [nzPlacement]="'bottomCenter'" style="width: 100px;text-align: center">
+      <a nz-dropdown>
+        <nz-avatar [nzText]="text" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>
+      </a>
+      <ul nz-menu nzSelectable style="margin-top: 10px;">
+        <li nz-menu-item>
+          <a (click)="modify()">修改资料</a>
+        </li>
+        <li nz-menu-item>
+          <a (click)="createTplModal(tplTitle, tplContent, tplFooter)">修改密码</a>
+        </li>
+        <li nz-menu-item>
+          <a (click)="loginOut()">退出</a>
+        </li>
+      </ul>
+    </nz-dropdown>
+
   </div>
 </div>
 <div class="content">
@@ -16,50 +32,62 @@
         <span title><i class="anticon anticon-mail"></i>{{case}}</span>
       </li>
       <li nz-submenu>
-        <span title><i class="anticon anticon-setting"></i>用户管理</span>
+        <span title><i class="anticon anticon-setting"></i>{{userManager}}</span>
         <ul>
-          <li nz-menu-item (click)="go('user/list')">用户列表</li>
-          <li nz-menu-item>Option 10</li>
-          <li nz-menu-item>Option 11</li>
+          <li nz-menu-item (click)="go('user/list')">{{userList}}</li>
+          <!--<li nz-menu-item>Option 10</li>-->
+          <!--<li nz-menu-item>Option 11</li>-->
         </ul>
       </li>
-      <li nz-submenu>
-        <span title><i class="anticon anticon-mail"></i> Navigation One</span>
-        <ul>
-          <li nz-menu-group>
-            <span title>Item 1</span>
-            <ul>
-              <li nz-menu-item>Option 1</li>
-              <li nz-menu-item>Option 2</li>
-            </ul>
-          </li>
-          <li nz-menu-group>
-            <span title>Item 2</span>
-            <ul>
-              <li nz-menu-item>Option 3</li>
-              <li nz-menu-item>Option 4</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu>
-        <span title><i class="anticon anticon-appstore"></i> Navigation Two</span>
-        <ul>
-          <li nz-menu-item>Option 5</li>
-          <li nz-menu-item>Option 6</li>
-          <li nz-submenu>
-            <span title>Submenu</span>
-            <ul>
-              <li nz-menu-item>Option 7</li>
-              <li nz-menu-item>Option 8</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+      <!--<li nz-submenu>-->
+        <!--<span title><i class="anticon anticon-mail"></i> Navigation One</span>-->
+        <!--<ul>-->
+          <!--<li nz-menu-group>-->
+            <!--<span title>Item 1</span>-->
+            <!--<ul>-->
+              <!--<li nz-menu-item>Option 1</li>-->
+              <!--<li nz-menu-item>Option 2</li>-->
+            <!--</ul>-->
+          <!--</li>-->
+          <!--<li nz-menu-group>-->
+            <!--<span title>Item 2</span>-->
+            <!--<ul>-->
+              <!--<li nz-menu-item>Option 3</li>-->
+              <!--<li nz-menu-item>Option 4</li>-->
+            <!--</ul>-->
+          <!--</li>-->
+        <!--</ul>-->
+      <!--</li>-->
+      <!--<li nz-submenu>-->
+        <!--<span title><i class="anticon anticon-appstore"></i> Navigation Two</span>-->
+        <!--<ul>-->
+          <!--<li nz-menu-item>Option 5</li>-->
+          <!--<li nz-menu-item>Option 6</li>-->
+          <!--<li nz-submenu>-->
+            <!--<span title>Submenu</span>-->
+            <!--<ul>-->
+              <!--<li nz-menu-item>Option 7</li>-->
+              <!--<li nz-menu-item>Option 8</li>-->
+            <!--</ul>-->
+          <!--</li>-->
+        <!--</ul>-->
+      <!--</li>-->
     </ul>
   </div>
   <div class="content-container">
     <router-outlet></router-outlet>
   </div>
 </div>
+<ng-template #tplTitle>
+  <span>修改密码</span>
+</ng-template>
+<ng-template #tplContent>
+  <l-form class="login-form" [config]="config" [data]="data">
+  </l-form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="primary" (click)="modify()" [nzLoading]="tplModalButtonLoading">确定</button>
+  <button nz-button (click)="destroyTplModal()">取消</button>
+</ng-template>
+
 

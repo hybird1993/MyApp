@@ -1,7 +1,11 @@
 {
   "loading": "\u767b\u5f55",
   "menu-case": "\u4f8b\u5b50",
-  "choose1": "选项1",
-  "choose2": "选项2",
-  "input_placeholder": "请输入"
+  "choose1": "\u9009\u9879\u0031",
+  "choose2": "\u9009\u9879\u0032",
+  "input_placeholder": "\u8bf7\u8f93\u5165",
+  "user.userManager": "\u7528\u6237\u7ba1\u7406",
+  "user.userList": "\u7528\u6237\u5217\u8868",
+  "add": "\u65b0\u589e",
+  "username": "\u7528\u6237\u540d"
 }

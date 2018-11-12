@@ -3,6 +3,7 @@ import {FormFactory, FormPropsConfig} from '../../shared/components/form/form.pr
 import {UserService} from '../service/user-service/user.service';
 import {NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +16,16 @@ export class LoginComponent implements OnInit {
     username: null,
     password: null
   };
+  lang: string = 'zh';
   constructor(private formFactory: FormFactory,
               private $userService: UserService,
               private $message: NzMessageService,
+              public translateService: TranslateService,
               private $router: Router) {
   }
 
   ngOnInit(): void {
+    localStorage.setItem('lang', this.lang);
     this.config = this.formFactory.createForm({
       items: [
         {
@@ -60,4 +64,16 @@ export class LoginComponent implements OnInit {
       this.$message.error(error.msg);
     });
   }
+
+  /**
+   * 改变语言
+   */
+  setDefaultLang() {
+    console.log('lang -->' + this.lang);
+    this.translateService.use(this.lang);
+    localStorage.setItem('lang', this.lang);
+    // const nzLang = lang === 'zh' ? zh_CN : en_US;
+    // this.nzI18nService.setLocale(nzLang);
+  }
+
 }

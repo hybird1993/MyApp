@@ -1,8 +1,9 @@
-<button nz-button [nzType]="'primary'" (click)="go('/pages/user/insert')" style="margin: 0 10px 20px 0">新增</button>
+<button nz-button [nzType]="'primary'" (click)="go('/pages/user/insert')" style="margin: 0 10px 20px 0">{{add}}</button>
 
 <nz-table #nzTable [nzData]="dataSet" [nzPageSize]="10" [nzScroll]="{ x: '1000px', y: '500px' }">
   <thead>
   <tr>
+    <th nzShowCheckbox nzShowRowSelection [nzSelections]="listOfSelection" [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="checkAll($event)"></th>
     <th nzWidth="200px" nzLeft="0px">用户名</th>
     <th nzWidth="100px" nzLeft="100px">年龄</th>
     <th nzWidth="200px">昵称</th>
@@ -12,7 +13,9 @@
   </tr>
   </thead>
   <tbody>
+
   <tr *ngFor="let data of nzTable.data">
+    <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus()"></td>
     <td nzLeft="0px">{{data.name}}</td>
     <td nzLeft="100px">{{data.age}}</td>
     <td>{{data.nickname}}</td>
@@ -21,6 +24,7 @@
     <td nzRight="0px">
       <a nz-tooltip nzTitle="编辑" class="operate-icon"  (click)="go('/pages/user/detail')"><i class="anticon anticon-edit"></i></a>
       <a nz-tooltip nzTitle="修改密码" class="operate-icon"><i class="anticon anticon-reload"></i></a>
+      <a nz-tooltip nzTitle="删除" class="operate-icon"><i class="anticon anticon-delete"></i></a>
     </td>
   </tr>
   </tbody>
