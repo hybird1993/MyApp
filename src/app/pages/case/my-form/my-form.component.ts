@@ -75,7 +75,7 @@ export class MyFormComponent implements OnInit {
         type: 'primary',
         check: true,
         clickEvent: () => {
-          console.log(this.config.getData());
+          console.log(this.config.formGroup.value);
         }
       }
     ];
