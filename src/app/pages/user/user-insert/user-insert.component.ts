@@ -4,7 +4,7 @@ import {NzMessageService} from 'ng-zorro-antd';
 import {UserService} from '../../../core/service/user-service/user.service';
 import {Router} from '@angular/router';
 import {User} from '../../../core/models/user';
-import {CommonSetting} from '../../../core/utils/Commin-setting';
+import {CommonSetting} from '../../../core/utils/common-setting';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
@@ -31,7 +31,7 @@ export class UserInsertComponent implements OnInit {
         {
           key: 'name',
           type: 'input',
-          label: '用户名',
+          label: 'user.username',
           required: true,
           rules: [{required: true}],
           asyncRules: [
@@ -39,7 +39,7 @@ export class UserInsertComponent implements OnInit {
               return Observable.create(observer => {
                 clearTimeout(this.timer);
                 this.timer = setTimeout(() => {
-                  this.$userService.checkUserExist(this.config.getData().name).then(
+                  this.$userService.checkUserExist(this.config.formGroup.value.name).then(
                     result => {
                       observer.next(result.data ? null : {error: false, duplicated: true});
                       observer.complete();
@@ -62,7 +62,7 @@ export class UserInsertComponent implements OnInit {
         {
           key: 'password',
           type: 'password',
-          label: '密码',
+          label: 'password',
           required: true,
           inputWith: '200px',
           rules: [{required: true}],
@@ -72,7 +72,7 @@ export class UserInsertComponent implements OnInit {
         {
           key: 'nickname',
           type: 'input',
-          label: '昵称',
+          label: 'user.nickname',
           inputWith: '200px',
           modelChange: (controls, event) => {
           }
@@ -80,7 +80,7 @@ export class UserInsertComponent implements OnInit {
         {
           key: 'email',
           type: 'input',
-          label: '邮箱',
+          label: 'user.email',
           inputWith: '200px',
           modelChange: (controls, event) => {
           }
@@ -92,17 +92,23 @@ export class UserInsertComponent implements OnInit {
 
     this.buttons = [
       {
-        text: '保存',
+        text: 'save',
         check: true,
         clickEvent: () => {
           this.save();
+        }
+      },
+      {
+        text: 'back',
+        clickEvent: () => {
+          this.$router.navigate(['/pages/user/list']);
         }
       }
     ];
   }
 
   save() {
-    const params: User = this.config.getData();
+    const params: User = this.config.formGroup.value;
     this.$userService.register(params).then(result => {
       this.$message.success('保存成功');
       setTimeout(() => {

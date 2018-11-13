@@ -14,55 +14,50 @@ export class FormComponent implements OnInit {
   @Input() buttons = [];
   @Input() data = {};
   @Input() disabled: boolean = false;
-  @Output() getData = new EventEmitter();
   _items = [];
   _formGroup: FormGroup = new FormGroup({});
   lang = {
     input_placeholder: ''
   };
 
+  // 缓存
+  formGroup_cache = {};
+
   constructor(public translateService: TranslateService,
   ) {
-    this.setDefaultLang();
+    // this.setDefaultLang();
   }
 
   ngOnInit() {
-    this.config.getFormGroup = () => {
-      return this._formGroup;
-    };
-    this.config.getData = () => {
-      return this._formGroup.value;
-    };
-    this.config.getFormValid = () => {
-      return this._formGroup.valid === true;
-    };
-    console.log(this.config)
-    console.log(this.config.items)
     this.config.items.forEach(item => {
-      const itemValue = this.data[item.key] === 0 ? 0 : this.data[item.key] || '';
+      const itemValue = this.data[item.key] === 0 ? 0 : this.data[item.key];
       const $control = new FormControl(itemValue, this.addRuleControl(item.rules), this.addAsyncControl(item.asyncRules));
       this._formGroup.addControl(item.key, $control);
+
+      this.formGroup_cache[item.key] = $control;
     });
+    this.config.formGroup = this._formGroup;
     console.log(this._formGroup);
-    this.translateService.onLangChange
-      .subscribe(() => {
-        this.setDefaultLang();
-      });
+    // this.translateService.onLangChange
+    //   .subscribe(() => {
+    //     this.setDefaultLang();
+    //   });
   }
 
   modelChange(controls, event, key) {
+    this.config.formGroup = this._formGroup;
     console.log(controls);
     console.log(event);
     console.log(key);
   }
 
-  setDefaultLang() {
-    const arr = Object.keys(this.lang);
-    this.translateService.get(arr).subscribe(res => {
-      this.lang = Object.assign({}, res);
-    });
-    console.log(this.lang);
-  }
+  // setDefaultLang() {
+  //   const arr = Object.keys(this.lang);
+  //   this.translateService.get(arr).subscribe(res => {
+  //     this.lang = Object.assign({}, res);
+  //   });
+  //   console.log(this.lang);
+  // }
 
   removeItem(key) {
     this._formGroup.removeControl(key);
@@ -80,7 +75,7 @@ export class FormComponent implements OnInit {
         let _keys = Object.keys(rule);
         if (_keys.includes('required')) {
           rule.code = 'required';
-          rule.msg = rule.msg || '此项为必填项';
+          rule.msg = rule.msg || 'error.required';
           control.push(Validators.required);
         }
         if (_keys.includes('minLength')) {

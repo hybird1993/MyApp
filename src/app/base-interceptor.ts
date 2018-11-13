@@ -3,11 +3,13 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse,
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Injectable()
 export class BaseInterceptor implements HttpInterceptor {
   constructor(
     private $router: Router,
+    private $message: NzMessageService
   ) {
   }
   intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -67,6 +69,7 @@ export class BaseInterceptor implements HttpInterceptor {
       console.error('An error occurred:', error.error.message);
     } else {
       if (error.status === 401) {
+        this.$message.remove();
         this.$router.navigate(['/login'], {}).then(() => {});
       }
       // The backend returned an unsuccessful response code.

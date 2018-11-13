@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormFactory, FormPropsConfig} from '../../shared/components/form/form.props.config';
 import {UserService} from '../service/user-service/user.service';
-import {NzMessageService} from 'ng-zorro-antd';
+import {en_US, zh_CN, NzI18nService, NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -16,23 +16,25 @@ export class LoginComponent implements OnInit {
     username: null,
     password: null
   };
-  lang: string = 'zh';
+  lang: string;
   constructor(private formFactory: FormFactory,
               private $userService: UserService,
               private $message: NzMessageService,
               public translateService: TranslateService,
+              private nzI18nService: NzI18nService,
               private $router: Router) {
   }
 
   ngOnInit(): void {
-    localStorage.setItem('lang', this.lang);
+    this.lang = localStorage.getItem('lang') || 'zh';
+    this.setDefaultLang();
     this.config = this.formFactory.createForm({
       items: [
         {
           key: 'username',
           type: 'input',
           removeLabel: true,
-          placeholder: '请输入您的用户名',
+          placeholder: 'placeholder.username',
           rules: [{required: true}],
           inputWith: '200px',
           modelChange: (controls, event) => {
@@ -41,7 +43,7 @@ export class LoginComponent implements OnInit {
         {
           key: 'password',
           type: 'password',
-          placeholder: '请输入您的密码',
+          placeholder: 'placeholder.password',
           removeLabel: true,
           inputWith: '200px',
           rules: [{required: true}],
@@ -55,7 +57,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    const params = this.config.getData();
+    const params = this.config.formGroup.value;
     console.log(params);
     this.$userService.login(params.username, params.password).then( result => {
       localStorage.setItem('auth', 'l');
@@ -72,8 +74,8 @@ export class LoginComponent implements OnInit {
     console.log('lang -->' + this.lang);
     this.translateService.use(this.lang);
     localStorage.setItem('lang', this.lang);
-    // const nzLang = lang === 'zh' ? zh_CN : en_US;
-    // this.nzI18nService.setLocale(nzLang);
+    const nzLang = this.lang === 'zh' ? zh_CN : en_US;
+    this.nzI18nService.setLocale(nzLang);
   }
 
 }

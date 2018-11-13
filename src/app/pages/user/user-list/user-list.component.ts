@@ -3,6 +3,7 @@ import {UserService} from '../../../core/service/user-service/user.service';
 import {NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {CommonUtils} from '../../../core/utils/common-utils';
 
 @Component({
   selector: 'app-user-list',
@@ -11,31 +12,31 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class UserListComponent implements OnInit {
   dataSet = [];
-  add;
   allChecked = false;
   indeterminate = false;
   listOfSelection = [
     {
-      text    : 'Select All Row',
+      text: 'Select All Row',
       onSelect: () => {
         this.checkAll(true);
       }
     },
     {
-      text    : 'Select Odd Row',
+      text: 'Select Odd Row',
       onSelect: () => {
         this.dataSet.forEach((data, index) => data.checked = index % 2 !== 0);
         this.refreshStatus();
       }
     },
     {
-      text    : 'Select Even Row',
+      text: 'Select Even Row',
       onSelect: () => {
         this.dataSet.forEach((data, index) => data.checked = index % 2 === 0);
         this.refreshStatus();
       }
     }
   ];
+  format = CommonUtils.dateFormat;
 
   constructor(
     private $service: UserService,
@@ -46,29 +47,26 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
-    this.add = this.translateService.instant('add');
-    this.translateService.onLangChange
-      .subscribe(() => {
-        this.add = this.translateService.instant('add');
-      });
   }
 
   getData() {
-    this.$message.loading('获取中...');
+    const msg = this.translateService.instant('loading');
+    this.$message.loading(msg);
     this.$service.getUsersList().then(result => {
       this.$message.remove();
       console.log();
       let data = [];
       result.data.forEach(item => {
+        const createTime = item.create_time ? this.format('yyyy/MM/dd hh:mm:ss', new Date(item.create_time)) : '';
         data.push({
           name: item.name,
           age: item.age,
           nickname: item.nickname,
           email: item.email,
-          createTime: item.create_time
+          createTime: createTime
         });
       });
-      console.log(data)
+      console.log(data);
       this.dataSet = data;
     }, err => {
       this.$message.error(err.msg);
@@ -91,4 +89,19 @@ export class UserListComponent implements OnInit {
     this.refreshStatus();
   }
 
+  /**
+   * 删除用户
+   * @param ids  array|string|number
+   */
+  delete(ids) {
+
+  }
+
+  /**
+   * 删除用户
+   * @param ids  array|string|number
+   */
+  deleteUsers(ids) {
+
+  }
 }

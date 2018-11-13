@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {en_US, zh_CN, NzI18nService, NzMessageService, NzModalService, NzModalRef} from 'ng-zorro-antd';
 import {UserService} from '../core/service/user-service/user.service';
 import {error} from 'util';
-import {FormPropsConfig} from '../shared/components/form/form.props.config';
+import {FormFactory, FormPropsConfig} from '../shared/components/form/form.props.config';
 
 @Component({
   selector: 'app-pages',
@@ -12,17 +12,13 @@ import {FormPropsConfig} from '../shared/components/form/form.props.config';
   styleUrls: ['./pages.component.scss']
 })
 export class PagesComponent implements OnInit {
-  case = 'case';
   lang;
   text: string = 'admin';
   color: string = '#2196F3';
-  userList: string;
-  userManager: string;
   tplModal: NzModalRef;
   tplModalButtonLoading = false;
   config: FormPropsConfig;
   data = {
-    username: null,
     old_password: null,
     new_password: null,
     re_password: null
@@ -35,25 +31,57 @@ export class PagesComponent implements OnInit {
      private $message: NzMessageService,
      private $router: Router,
      private modalService: NzModalService,
+     private formFactory: FormFactory,
   ) {
     this.lang = localStorage.getItem('lang');
     console.log('lang --->' + this.lang);
     this.translateService.use(this.lang);
-    this.case = this.translateService.instant('menu-case');
-    this.userList = this.translateService.instant('user.userList');
-    this.userManager = this.translateService.instant('user.userManager');
-    this.translateService.onLangChange
-      .subscribe(() => {
-        this.case = this.translateService.instant('menu-case');
-        this.userList = this.translateService.instant('user.userList');
-        this.userManager = this.translateService.instant('user.userManager');
-       //  this.translateService.get(['loading']).subscribe(res => {
-       //    this.title = res.loading;
-       //  });
-      });
+    // this.userManager = this.translateService.instant('user.userManager');
+    // this.translateService.onLangChange.subscribe(() => {
+      // this.userManager = this.translateService.instant('user.userManager');
+      // this.translateService.get(['loading']).subscribe(res => {
+      //   this.title = res.loading;
+      // });
+    // });
   }
 
   ngOnInit() {
+    this.config = this.formFactory.createForm({
+      items: [
+        {
+          key: 'old_password',
+          type: 'password',
+          label: 'old_password',
+          placeholder: '',
+          rules: [{required: true}],
+          inputWith: '200px',
+          modelChange: (controls, event) => {
+          }
+        },
+        {
+          key: 'new_password',
+          type: 'password',
+          placeholder: '',
+          label: 'new_password',
+          inputWith: '200px',
+          rules: [{required: true}],
+          modelChange: (controls, event) => {
+          }
+        },
+        {
+          key: 're_password',
+          type: 'password',
+          placeholder: '',
+          label: 'confirm_password',
+          inputWith: '200px',
+          rules: [{required: true}],
+          modelChange: (controls, event) => {
+          }
+        },
+      ],
+      labelWidth: '148px',
+      labelAlign: 'left',
+    });
   }
   go(url) {
     this.router.navigate([`pages/${url}`], {}).then(() => {});

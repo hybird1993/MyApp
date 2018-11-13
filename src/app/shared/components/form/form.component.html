@@ -3,10 +3,10 @@
     <div class="form-container">
       <ng-container *ngFor="let item of config.items">
         <div class="item-item" [style.width]="item.width ? item.width: '100%'">
-          <div *ngIf="!item.removeLabel" class="item-item-label" [ngStyle]="item.labelStyle">
+          <div *ngIf="!item.removeLabel" class="item-item-label" [class.width]="config.labelWidth" [ngStyle]="item.labelStyle">
             <span>
               <em *ngIf="item.required" style="color: red;">*</em>
-                {{item.label}}
+                {{item.label | translate}}
                 <nz-tooltip [nzTitle]="item.labelMsg" [nzPlacement]="'bottom'" *ngIf="item.labelMsg">
                 <span nz-tooltip><i class="anticon anticon-info-circle-o"></i></span>
                 </nz-tooltip>
@@ -15,19 +15,19 @@
           <div class="item-item-content">
             <div class="item-item-component" [ngSwitch]="item.type">
               <div *ngSwitchCase="'text'" class="item-item-text" [title]="data[item.key]">
-                {{data[item.key]}}
+                {{data[item.key] | translate}}
               </div>
               <div *ngSwitchCase="'input'">
                 <input nz-input autocomplete="off"
                        [style.width]="item.inputWith || '160px'"
-                       placeholder="{{item.placeholder || lang.input_placeholder}}"
+                       placeholder="{{item.placeholder || lang.input_placeholder | translate}}"
                        formControlName="{{item.key}}"/>
               </div>
               <div *ngSwitchCase="'password'">
                 <input nz-input autocomplete="off"
                        [style.width]="item.inputWith || '160px'"
                        type="password"
-                       placeholder="{{item.placeholder || lang.input_placeholder}}"
+                       placeholder="{{item.placeholder || lang.input_placeholder | translate}}"
                        formControlName="{{item.key}}"/>
               </div>
               <div *ngSwitchCase="'radio'">
@@ -35,7 +35,7 @@
                                 formControlName="{{item.key}}">
                   <ng-container *ngFor="let option of item.options">
                     <label nz-radio [nzDisabled]="disabled || option.disabled"
-                           [nzValue]="option.value">{{option.label}}</label>
+                           [nzValue]="option.value">{{option.label | translate}}</label>
                   </ng-container>
                 </nz-radio-group>
               </div>
@@ -51,12 +51,12 @@
                 *ngIf="!_formGroup.controls[item.key].valid && (_formGroup.controls[item.key].dirty || _formGroup.controls[item.key].touched ||(data[item.key] != null && data[item.key] != undefined))">
                 <ng-container *ngFor="let rule of item.rules">
                   <div class="item-item-error-msg" *ngIf="_formGroup.controls[item.key].hasError(rule.code)">
-                    <span>{{rule.msg}}</span>
+                    <span>{{rule.msg | translate}}</span>
                   </div>
                 </ng-container>
                 <ng-container *ngFor="let rule of item.asyncRules">
                   <div class="item-error-msg" *ngIf="_formGroup.controls[item.key].hasError(rule.asyncCode)">
-                    <span>{{rule.msg}}</span>
+                    <span>{{rule.msg | translate}}</span>
                   </div>
                 </ng-container>
               </div>
@@ -66,14 +66,14 @@
       </ng-container>
     </div>
   </form>
-  <div class="btn-container">
+  <div *ngIf="buttons.length > 0" class="btn-container">
     <ng-content select="button"></ng-content>
     <button *ngFor="let btn of buttons"
             nz-button class="form-btn"
             [nzType]="btn.type || 'default'"
             [nzLoading]="btn.isLoading"
             [disabled]="btn.check && !_formGroup.valid"
-            (click)="btn.clickEvent()">{{btn.text}}
+            (click)="btn.clickEvent()">{{btn.text | translate}}
     </button>
   </div>
 </div>

@@ -1,26 +1,28 @@
+import {FormGroup} from '@angular/forms';
+
 export class FormEvent {
   /**
-   * 获取表单
+   * 去除条目
    */
-  getFormGroup ?: () => any;
+  removeItems?: () => any;
+
   /**
-   * 获取表单值
+   * 添加条目
    */
-  getData ?: () => any;
-  /**
-   * 获取表单输入值是否正确
-   */
-  getFormValid ?: () => boolean;
+  addItems?: () => any;
 }
 
 export class FormPropsConfig extends FormEvent {
   labelWidth?: string | number;
   labelAlign?: string;
+  formGroup?: FormGroup;
+  buttons?: boolean = false;
   items?: FormItemConfig[];
 }
 
 export class FormItemOperation {
   disabled?: boolean;
+
   constructor() {
     this.disabled = false;
   }
@@ -41,7 +43,7 @@ export class FormItemConfig extends FormItemOperation {
   modelChange?: any;
   placeholder?: string;
   labelMsg?: string;
-  inputWith?: string;  // 输入框宽度
+  inputWith?: string = '148px';  // 输入框宽度
   hidden?: boolean = false;
   options?: any;
 }
@@ -50,14 +52,14 @@ export class FormPropsConfigImpl extends FormPropsConfig {
   constructor(config?: FormPropsConfig) {
     super();
     if (!!config) {
-      console.log(config)
+      console.log(config);
       Object.keys(config).forEach(key => {
         if (key === 'items') {
           let items = [];
-          console.log(config[key])
+          console.log(config[key]);
           config[key].forEach(item => {
-            console.log(item)
-            console.log(item instanceof FormItemConfig)
+            console.log(item);
+            console.log(item instanceof FormItemConfig);
             items.push(item);
             // TODO
             // if (item instanceof FormItemConfig) {
@@ -66,7 +68,7 @@ export class FormPropsConfigImpl extends FormPropsConfig {
             //   items.push(new FormItemConfigImpl());
             // }
           });
-          console.log(items)
+          console.log(items);
           config[key] = items;
         }
         this[key] = config[key];

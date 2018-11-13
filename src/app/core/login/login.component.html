@@ -15,10 +15,10 @@
     </div>
   </div>
   <div class="login-container">
-    <div class="login-title">用户登录</div>
+    <div class="login-title">{{"user.login" | translate}}</div>
     <l-form class="login-form" [config]="config" [data]="data">
-      <button nz-button class="login-btn" [nzType]="'primary'" (click)="login()">登录</button>
     </l-form>
+    <button nz-button class="login-btn" [nzType]="'primary'" (click)="login()" [disabled]="!config.formGroup.valid">{{"login" | translate}}</button>
     <nz-radio-group [(ngModel)]="lang" (ngModelChange)="setDefaultLang()">
       <label nz-radio nzValue="zh">中文</label>
       <label nz-radio nzValue="en">English</label>
