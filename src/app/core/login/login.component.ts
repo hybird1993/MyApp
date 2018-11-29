@@ -4,6 +4,7 @@ import {UserService} from '../service/user-service/user.service';
 import {en_US, zh_CN, NzI18nService, NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import {UserMissionService} from '../../mission-store/user.mission.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
               private $message: NzMessageService,
               public translateService: TranslateService,
               private nzI18nService: NzI18nService,
-              private $router: Router) {
+              private $router: Router,
+              private $mission: UserMissionService) {
   }
 
   ngOnInit(): void {

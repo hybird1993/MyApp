@@ -1,6 +1,13 @@
 <button nz-button [nzType]="'primary'" (click)="go('/pages/user/insert')" style="margin: 0 10px 20px 0">{{"add" | translate}}</button>
 
-<nz-table #nzTable [nzData]="dataSet" [nzPageSize]="10" [nzScroll]="{ x: '1000px', y: '500px' }">
+<nz-table #nzTable
+          [nzData]="dataSet"
+          [nzLoading]="loading"
+          [nzTotal]="totalCount"
+          [nzPageIndex]="pageNum"
+          [nzPageSize]="pageSize"
+          (nzPageIndexChange)="searchData()"
+          (nzPageSizeChange)="searchData()">
   <thead>
   <tr>
     <th nzShowCheckbox nzShowRowSelection [nzSelections]="listOfSelection" [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="checkAll($event)"></th>
@@ -29,3 +36,4 @@
   </tr>
   </tbody>
 </nz-table>
+

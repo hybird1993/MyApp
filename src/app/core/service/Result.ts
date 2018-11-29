@@ -6,7 +6,7 @@ export interface Result<T> {
     /**
      * result - data
      */
-    data: T;
+    data?: T;
     /**
      * result - msg
      */
@@ -21,7 +21,7 @@ export interface EntitiesResult<T> {
     /**
      * page size
      */
-    size: number;
+    pageSize: number;
     /**
      * data's length
      */

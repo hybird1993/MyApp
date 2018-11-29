@@ -1,7 +1,10 @@
+$height: 60px;
+$width: 240px;
 .header{
+  position: fixed;
   width: 100%;
   border-bottom: 1px solid #eee;
-  height: 60px;
+  height: $height;
   display: flex;
   align-items: center;
   .header-left {
@@ -12,11 +15,22 @@
   }
 }
 .content {
+  position: absolute;
+  left: 0;
+  top: $height;
+  right: 0;
+  bottom: 0;
   display: flex;
   .content-menu {
-
+    position: fixed;
   }
   .content-container {
+    position: absolute;
+    left: $width;
+    right: 0;
+    top: 0;
+    bottom: 0;
     padding: 20px;
+    overflow: auto;
   }
 }

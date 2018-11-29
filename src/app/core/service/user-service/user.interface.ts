@@ -1,12 +1,14 @@
-import {Result} from '../Result';
+import {EntitiesResult, Result} from '../Result';
 import {User} from '../../models/user';
+import {QueryParams} from '../QueryParams';
 
 export  interface  UserInterface {
   /**
    * 获取用户列表
-   * @returns {Promise<Result<any>>}
+   * @param {QueryParams} params
+   * @returns {Promise<Result<EntitiesResult<any>>>}
    */
-  getUsersList(): Promise<Result<any>>;
+  getUsersList(params: QueryParams): Promise<Result<EntitiesResult<User>>>;
 
   /**
    * 登录
@@ -43,4 +45,10 @@ export  interface  UserInterface {
    */
 
   modify(params: User): Promise<Result<any>>;
+
+  /**
+   * 获取用户信息
+   * @returns {Promise<Result<any>>}
+   */
+  getUserInfo(): Promise<Result<any>>;
 }

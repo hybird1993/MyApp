@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {UserInterface} from './user.interface';
 import {HttpClient} from '@angular/common/http';
-import {Result} from '../Result';
+import {EntitiesResult, Result} from '../Result';
 import {User} from '../../models/user';
+import {QueryParams} from '../QueryParams';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class UserService implements UserInterface {
     private $http: HttpClient,
   ) { }
 
-  getUsersList(): Promise<Result<any>> {
+  getUsersList(params: QueryParams): Promise<Result<EntitiesResult<User>>> {
     return new Promise((resolve, reject) => {
-      this.$http.get('/api/user/list').subscribe((result: Result<any>) => {
+      this.$http.post('/api/user/list', params).subscribe((result: Result<any>) => {
         result.code === 0 ? resolve(result) : reject(result);
       });
     });
@@ -56,6 +57,14 @@ export class UserService implements UserInterface {
   modify(params: User): Promise<Result<any>> {
     return new Promise((resolve, reject) => {
       this.$http.post(`/api/user/modify`, User).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
+  getUserInfo(): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.get(`/api/user/getUserInfo`).subscribe((result: Result<any>) => {
         result.code === 0 ? resolve(result) : reject(result);
       });
     });

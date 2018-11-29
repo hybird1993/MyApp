@@ -3,5 +3,5 @@ export class QueryParams {
     pageNum: number = 1;
     sortItem?: string;
     sortWay?: string;
-    queryTerm: object = {};
+   // queryTerm?: object = {};
 }

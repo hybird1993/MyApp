@@ -4,6 +4,7 @@ import {NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {CommonUtils} from '../../../core/utils/common-utils';
+import {QueryParams} from '../../../core/service/QueryParams';
 
 @Component({
   selector: 'app-user-list',
@@ -12,8 +13,13 @@ import {CommonUtils} from '../../../core/utils/common-utils';
 })
 export class UserListComponent implements OnInit {
   dataSet = [];
+  params: QueryParams = new QueryParams();
+  totalCount: number = 0;
+  pageSize: number = this.params.pageSize;
+  pageNum: number = this.params.pageNum;
   allChecked = false;
   indeterminate = false;
+  loading: boolean = false;
   listOfSelection = [
     {
       text: 'Select All Row',
@@ -46,19 +52,18 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getData();
+   // this.getData();
   }
 
   getData() {
     const msg = this.translateService.instant('loading');
-    this.$message.loading(msg);
-    this.$service.getUsersList().then(result => {
-      this.$message.remove();
-      console.log();
-      let data = [];
-      result.data.forEach(item => {
+    this.loading = true;
+    this.$service.getUsersList(this.params).then(result => {
+      this.loading = false;
+      let dataSet = [];
+      result.data.data.forEach(item => {
         const createTime = item.create_time ? this.format('yyyy/MM/dd hh:mm:ss', new Date(item.create_time)) : '';
-        data.push({
+        dataSet.push({
           name: item.name,
           age: item.age,
           nickname: item.nickname,
@@ -66,9 +71,12 @@ export class UserListComponent implements OnInit {
           createTime: createTime
         });
       });
-      console.log(data);
-      this.dataSet = data;
+      console.log(dataSet);
+      this.dataSet = dataSet;
+      this.totalCount = result.data.totalCount;
+      console.log(this.params);
     }, err => {
+      this.loading = false;
       this.$message.error(err.msg);
     });
   }
@@ -87,6 +95,10 @@ export class UserListComponent implements OnInit {
   checkAll(value: boolean): void {
     this.dataSet.forEach(data => data.checked = value);
     this.refreshStatus();
+  }
+
+  searchData() {
+    this.getData();
   }
 
   /**

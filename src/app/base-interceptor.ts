@@ -15,11 +15,12 @@ export class BaseInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log(req);
     const token = localStorage.getItem('authorization');
+    const lang = localStorage.getItem('lang') || 'zh';
     let authReq;
     if (token) {
-       authReq = req.clone({setHeaders: {Authorization: token}});
+       authReq = req.clone({setHeaders: {Authorization: token, lang}});
     } else {
-       authReq = req.clone();
+       authReq = req.clone({setHeaders: {lang}});
     }
     // send cloned request with header to the next handler.
     return next.handle(authReq)

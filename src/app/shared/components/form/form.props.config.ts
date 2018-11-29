@@ -56,7 +56,7 @@ export class FormPropsConfigImpl extends FormPropsConfig {
       Object.keys(config).forEach(key => {
         if (key === 'items') {
           let items = [];
-          console.log(config[key]);
+         // console.log(config[key]);
           config[key].forEach(item => {
             console.log(item);
             console.log(item instanceof FormItemConfig);

@@ -8,7 +8,7 @@
     </nz-radio-group>
     <nz-dropdown [nzPlacement]="'bottomCenter'" style="width: 100px;text-align: center">
       <a nz-dropdown>
-        <nz-avatar [nzText]="text" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>
+        <nz-avatar [nzText]="user.nickname || user.name" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>
       </a>
       <ul nz-menu nzSelectable style="margin-top: 10px;">
         <li nz-menu-item>

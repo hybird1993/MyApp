@@ -26,7 +26,7 @@ export class CaseComponent implements OnInit {
         this.setDatas();
       });
     this.btns = ['reactive-form', 'template-driven-form', 'my-form', 'rxjs', 'http',
-      'marker-map', 'typescript', 'lodash', 'life-circle', 'pipe'];
+      'marker-map', 'typescript', 'lodash', 'life-circle', 'pipe', 'qunee'];
   }
 
   setDatas() {
@@ -36,12 +36,12 @@ export class CaseComponent implements OnInit {
     //   {name: this.translateService.instant('choose2')}
     // ];
     // 方法二
-    this.translateService.get(['choose1', 'choose2']).subscribe(res => {
-      this.datas = [
-        {name: res.choose1},
-        {name: res.choose2}
-      ];
-    });
+    // this.translateService.get(['choose1', 'choose2']).subscribe(res => {
+    //   this.datas = [
+    //     {name: res.choose1},
+    //     {name: res.choose2}
+    //   ];
+    // });
   }
 
   go(url) {

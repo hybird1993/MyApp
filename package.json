@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=2223  --proxy-config proxy.conf.json --hmr",
-    "build": "ng build",
+    "start_local": "ng serve --port=2223  --proxy-config proxy.conf.local.json --hmr",
+    "build": "ng build --prod --aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

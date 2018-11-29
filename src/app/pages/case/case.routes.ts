@@ -4,13 +4,13 @@ import {ReactiveFormComponent} from './reactive-form';
 import {TemplateDrivenFormComponent} from './template-driven-form';
 import {MyFormComponent} from './my-form';
 import {RxjsComponent} from './rxjs/rxjs.component';
-import {HttpComponent} from './http/http.component';
-import {MarkerMapComponent} from './marker-map/marker-map.component';
+// import {MarkerMapComponent} from './marker-map/marker-map.component';
 import {TypescriptComponent} from './typescript/typescript.component';
 import {LodashComponent} from './lodash/lodash.component';
 import {LifeCircleComponent} from './life-circle/life-circle.component';
 import {PipeComponent} from './pipe/pipe.component';
 import {ToolComponent} from './tool/tool.component';
+// import {QuneeComponent} from './qunee/qunee.component';
 
 export const routes: Routes = [
   {
@@ -37,18 +37,18 @@ export const routes: Routes = [
     path: 'rxjs',
     component: RxjsComponent
   },
-  {
-    path: 'http',
-    component: HttpComponent
-  },
-  {
-    path: 'marker-map',
-    component: MarkerMapComponent
-  },
+  // {
+  //   path: 'marker-map',
+  //   component: MarkerMapComponent
+  // },
   {
     path: 'typescript',
     component: TypescriptComponent
   },
+  // {
+  //   path: 'qunee',
+  //   component: QuneeComponent
+  // },
   {
     path: 'lodash',
     component: LodashComponent
