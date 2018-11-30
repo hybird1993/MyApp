@@ -69,4 +69,21 @@ export class UserService implements UserInterface {
       });
     });
   }
+
+  deleteUsers(ids): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.post(`/api/user/delete`, {ids}).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
+  modifyPassword(oldPwd, newPwd): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.post(`/api/user/modifyPassword`, {oldPwd, newPwd}).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
 }

@@ -51,4 +51,19 @@ export  interface  UserInterface {
    * @returns {Promise<Result<any>>}
    */
   getUserInfo(): Promise<Result<any>>;
+
+  /**
+   * 删除用户
+   * @param {string | number[]} ids
+   * @returns {Promise<Result<any>>}
+   */
+  deleteUsers(ids: string | number[]): Promise<Result<any>>;
+
+  /**
+   * 修改密码
+   * @param {string} oldPwd
+   * @param {string} newPwd
+   * @returns {Promise<Result<any>>}
+   */
+  modifyPassword(oldPwd: string, newPwd: string): Promise<Result<any>>;
 }

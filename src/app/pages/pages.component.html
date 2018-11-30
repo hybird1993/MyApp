@@ -86,7 +86,7 @@
   </l-form>
 </ng-template>
 <ng-template #tplFooter>
-  <button nz-button nzType="primary" (click)="modify()" [nzLoading]="tplModalButtonLoading">{{"confirm" | translate}}</button>
+  <button nz-button nzType="primary" (click)="modify()" [disabled]="!config.formGroup.valid"  [nzLoading]="tplModalButtonLoading">{{"confirm" | translate}}</button>
   <button nz-button (click)="destroyTplModal()">{{"cancel" | translate}}</button>
 </ng-template>
 

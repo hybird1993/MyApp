@@ -15,8 +15,8 @@ export class UserListComponent implements OnInit {
   dataSet = [];
   params: QueryParams = new QueryParams();
   totalCount: number = 0;
-  pageSize: number = this.params.pageSize;
-  pageNum: number = this.params.pageNum;
+  // pageSize: number = this.params.pageSize;
+  // pageNum: number = this.params.pageNum;
   allChecked = false;
   indeterminate = false;
   loading: boolean = false;
@@ -52,7 +52,7 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   // this.getData();
+    this.getData();
   }
 
   getData() {
@@ -60,20 +60,12 @@ export class UserListComponent implements OnInit {
     this.loading = true;
     this.$service.getUsersList(this.params).then(result => {
       this.loading = false;
-      let dataSet = [];
       result.data.data.forEach(item => {
-        const createTime = item.create_time ? this.format('yyyy/MM/dd hh:mm:ss', new Date(item.create_time)) : '';
-        dataSet.push({
-          name: item.name,
-          age: item.age,
-          nickname: item.nickname,
-          email: item.email,
-          createTime: createTime
-        });
+        item.createTime = item.create_time ? this.format('yyyy/MM/dd hh:mm:ss', new Date(item.create_time)) : '';
       });
-      console.log(dataSet);
-      this.dataSet = dataSet;
+      this.dataSet = result.data.data;
       this.totalCount = result.data.totalCount;
+      this.refreshStatus();
       console.log(this.params);
     }, err => {
       this.loading = false;
@@ -103,17 +95,31 @@ export class UserListComponent implements OnInit {
 
   /**
    * 删除用户
-   * @param ids  array|string|number
+   * @param ids  array|number
    */
-  delete(ids) {
-
+  delete(id) {
+    console.log(id);
+    this.$service.deleteUsers(id).then(result => {
+      console.log(result);
+      if (result.data.success > 0) {
+        this.params.pageNum = 1;
+        this.getData();
+      }
+    }, err => {
+      this.$message.error(err.msg);
+    });
   }
 
   /**
    * 删除用户
-   * @param ids  array|string|number
    */
-  deleteUsers(ids) {
-
+  deleteUsers() {
+    const arr = [];
+    this.dataSet.forEach(item => {
+      if (item.checked) {
+        arr.push(item.id);
+      }
+    });
+    this.delete(arr);
   }
 }

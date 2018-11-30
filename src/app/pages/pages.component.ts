@@ -6,6 +6,9 @@ import {UserService} from '../core/service/user-service/user.service';
 import {FormFactory, FormPropsConfig} from '../shared/components/form/form.props.config';
 import {UserMissionService} from '../mission-store/user.mission.service';
 import {User} from '../core/models/user';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {CommonSetting} from '../core/utils/common-setting';
 
 @Component({
   selector: 'app-pages',
@@ -24,28 +27,27 @@ export class PagesComponent implements OnInit, OnDestroy {
     new_password: null,
     re_password: null
   };
-
+  timer;
   sub;
-  constructor(
-     private router: Router,
-     public translateService: TranslateService,
-     private nzI18nService: NzI18nService,
-     private $server: UserService,
-     private $message: NzMessageService,
-     private $router: Router,
-     private modalService: NzModalService,
-     private formFactory: FormFactory,
-     private $mission: UserMissionService
-  ) {
+
+  constructor(private router: Router,
+              public translateService: TranslateService,
+              private nzI18nService: NzI18nService,
+              private $server: UserService,
+              private $message: NzMessageService,
+              private $router: Router,
+              private modalService: NzModalService,
+              private formFactory: FormFactory,
+              private $mission: UserMissionService) {
     this.lang = localStorage.getItem('lang');
     console.log('lang --->' + this.lang);
     this.translateService.use(this.lang);
     // this.userManager = this.translateService.instant('user.userManager');
     // this.translateService.onLangChange.subscribe(() => {
-      // this.userManager = this.translateService.instant('user.userManager');
-      // this.translateService.get(['loading']).subscribe(res => {
-      //   this.title = res.loading;
-      // });
+    // this.userManager = this.translateService.instant('user.userManager');
+    // this.translateService.get(['loading']).subscribe(res => {
+    //   this.title = res.loading;
+    // });
     // });
   }
 
@@ -77,6 +79,26 @@ export class PagesComponent implements OnInit, OnDestroy {
           label: 'new_password',
           inputWith: '200px',
           rules: [{required: true}],
+          asyncRules: [
+            {
+              asyncRule: (control: FormControl) => {
+                return Observable.create(observer => {
+                  clearTimeout(this.timer);
+                  this.timer = setTimeout(() => {
+                    const new_pwd = this.config.formGroup.value.new_password;
+                    const re_pwd = this.config.formGroup.value.re_password;
+                    observer.next(!re_pwd || re_pwd === new_pwd ? null : {
+                      error: false,
+                      duplicated: true
+                    });
+                    observer.complete();
+                  }, 0);
+                });
+              },
+              asyncCode: 'duplicated',
+              msg: '两次密码不一致'
+            }
+          ],
           modelChange: (controls, event) => {
           }
         },
@@ -87,6 +109,26 @@ export class PagesComponent implements OnInit, OnDestroy {
           label: 'confirm_password',
           inputWith: '200px',
           rules: [{required: true}],
+          asyncRules: [
+            {
+              asyncRule: (control: FormControl) => {
+                return Observable.create(observer => {
+                  clearTimeout(this.timer);
+                  this.timer = setTimeout(() => {
+                    const new_pwd = this.config.formGroup.value.new_password;
+                    const re_pwd = this.config.formGroup.value.re_password;
+                    observer.next(re_pwd === new_pwd ? null : {
+                      error: false,
+                      duplicated: true
+                    });
+                    observer.complete();
+                  }, 0);
+                });
+              },
+              asyncCode: 'duplicated',
+              msg: '两次密码不一致'
+            }
+          ],
           modelChange: (controls, event) => {
           }
         },
@@ -101,7 +143,8 @@ export class PagesComponent implements OnInit, OnDestroy {
   }
 
   go(url) {
-    this.router.navigate([`pages/${url}`], {}).then(() => {});
+    this.router.navigate([`pages/${url}`], {}).then(() => {
+    });
   }
 
   /**
@@ -127,7 +170,7 @@ export class PagesComponent implements OnInit, OnDestroy {
       nzFooter: tplFooter,
       nzMaskClosable: false,
       nzClosable: false,
-     // nzOnOk: () => console.log('Click ok')
+      // nzOnOk: () => console.log('Click ok')
     });
   }
 
@@ -157,5 +200,18 @@ export class PagesComponent implements OnInit, OnDestroy {
    */
   modify() {
     this.tplModalButtonLoading = true;
+    const oldPwd = this.config.formGroup.value.old_password;
+    const newPwd = this.config.formGroup.value.new_password;
+    this.$server.modifyPassword(oldPwd, newPwd).then(result => {
+        this.$message.success('密码修改成功');
+        this.tplModalButtonLoading = false;
+        setTimeout(() => {
+          this.destroyTplModal();
+        }, CommonSetting.getToastDuration());
+      }, err => {
+        this.tplModalButtonLoading = false;
+        this.$message.error(err.msg);
+      }
+    );
   }
 }

@@ -1,11 +1,13 @@
 <button nz-button [nzType]="'primary'" (click)="go('/pages/user/insert')" style="margin: 0 10px 20px 0">{{"add" | translate}}</button>
+<button nz-button [nzType]="'primary'" [disabled]="!this.allChecked && !this.indeterminate" (click)="deleteUsers()" style="margin: 0 10px 20px 0">{{"delete" | translate}}</button>
 
 <nz-table #nzTable
           [nzData]="dataSet"
           [nzLoading]="loading"
           [nzTotal]="totalCount"
-          [nzPageIndex]="pageNum"
-          [nzPageSize]="pageSize"
+          [(nzPageIndex)]="params.pageNum"
+          [(nzPageSize)]="params.pageSize"
+          [nzFrontPagination]="false"
           (nzPageIndexChange)="searchData()"
           (nzPageSizeChange)="searchData()">
   <thead>
