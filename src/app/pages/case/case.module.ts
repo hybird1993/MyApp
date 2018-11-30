@@ -15,6 +15,7 @@ import { PipeComponent } from './pipe/pipe.component';
 import { ChildComponent } from './life-circle/child/child.component';
 import { ToolComponent } from './tool/tool.component';
 import { QuneeComponent } from './qunee/qunee.component';
+import { VisjsComponent } from './visjs/visjs.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { QuneeComponent } from './qunee/qunee.component';
     ChildComponent,
     ToolComponent,
     QuneeComponent,
+    VisjsComponent,
   ],
   providers: [],
   exports: []
