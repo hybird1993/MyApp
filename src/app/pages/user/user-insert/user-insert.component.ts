@@ -56,8 +56,6 @@ export class UserInsertComponent implements OnInit {
             }
           ],
           inputWith: '200px',
-          modelChange: (controls, event) => {
-          }
         },
         {
           key: 'password',
@@ -66,24 +64,18 @@ export class UserInsertComponent implements OnInit {
           required: true,
           inputWith: '200px',
           rules: [{required: true}],
-          modelChange: (controls, event) => {
-          }
         },
         {
           key: 'nickname',
           type: 'input',
           label: 'user.nickname',
           inputWith: '200px',
-          modelChange: (controls, event) => {
-          }
         },
         {
           key: 'email',
           type: 'input',
           label: 'user.email',
           inputWith: '200px',
-          modelChange: (controls, event) => {
-          }
         }
       ],
       labelWidth: 148,

@@ -66,4 +66,12 @@ export  interface  UserInterface {
    * @returns {Promise<Result<any>>}
    */
   modifyPassword(oldPwd: string, newPwd: string): Promise<Result<any>>;
+
+  /**
+   * 重置密码
+   * @param {number} id
+   * @param {string} password
+   * @returns {Promise<Result<any>>}
+   */
+  resetPassword(id: number, password: string): Promise<Result<any>>;
 }

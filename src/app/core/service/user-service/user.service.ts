@@ -86,4 +86,12 @@ export class UserService implements UserInterface {
     });
   }
 
+  resetPassword(id, password): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.post(`/api/user/resetPassword`, {id, password}).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
 }

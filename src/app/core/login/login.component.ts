@@ -4,7 +4,6 @@ import {UserService} from '../service/user-service/user.service';
 import {en_US, zh_CN, NzI18nService, NzMessageService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {UserMissionService} from '../../mission-store/user.mission.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +23,7 @@ export class LoginComponent implements OnInit {
               public translateService: TranslateService,
               private nzI18nService: NzI18nService,
               private $router: Router,
-              private $mission: UserMissionService) {
+              ) {
   }
 
   ngOnInit(): void {
@@ -39,8 +38,6 @@ export class LoginComponent implements OnInit {
           placeholder: 'placeholder.username',
           rules: [{required: true}],
           inputWith: '200px',
-          modelChange: (controls, event) => {
-          }
         },
         {
           key: 'password',
@@ -49,8 +46,6 @@ export class LoginComponent implements OnInit {
           removeLabel: true,
           inputWith: '200px',
           rules: [{required: true}],
-          modelChange: (controls, event) => {
-          }
         },
       ],
       labelWidth: 148,

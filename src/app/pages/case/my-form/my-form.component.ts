@@ -27,8 +27,6 @@ export class MyFormComponent implements OnInit {
           type: 'input',
           rules: [{required: true}, {min: 1}, {max: 999}, {pattern: /^\d+$/, msg: '请输入1-999之间的整数'}],
           suffix: this.suffix,
-          modelChange: (controls, event) => {
-          }
         },
         {
           label: '限制时间段长度1：',
@@ -44,8 +42,6 @@ export class MyFormComponent implements OnInit {
           rules: [{required: true}, {min: 1}, {max: 999}, {pattern: /^\d+$/, msg: '请输入1-999之间的整数'}],
           width: '500px',
           suffix: this.suffix,
-          modelChange: (controls, event) => {
-          }
         },
         {
           label: '限制时间段长度2：',
@@ -59,8 +55,6 @@ export class MyFormComponent implements OnInit {
             {value: 'C', label: 'C'},
           ],
           rules: [{required: true}],
-          modelChange: (controls, event) => {
-          }
         }
       ],
       labelWidth: 148,

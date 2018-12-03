@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {FormPropsConfig} from './form.props.config';
+import {FormItemConfig, FormPropsConfig} from './form.props.config';
 import {CommonUtils} from '../../../core/utils/common-utils';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -19,12 +19,10 @@ export class FormComponent implements OnInit {
   lang = {
     input_placeholder: ''
   };
-
   // 缓存
   formGroup_cache = {};
 
-  constructor(public translateService: TranslateService,
-  ) {
+  constructor(public translateService: TranslateService,) {
     // this.setDefaultLang();
   }
 
@@ -44,12 +42,21 @@ export class FormComponent implements OnInit {
     //   });
   }
 
-  modelChange(controls, event, key) {
-    this.config.formGroup = this._formGroup;
-    console.log(controls);
-    console.log(event);
-    console.log(key);
+  modelChange(controls, event, item: FormItemConfig) {
+    // console.log(controls);
+    // console.log(event);
+    // console.log(item);
+    const relation = item.relation;
+    if (item.relation) {
+      relation.forEach(key => {
+        this._formGroup.controls[key].updateValueAndValidity();
+      });
+
+    }
+    console.log(this._formGroup);
+    //  this.config.formGroup = this._formGroup;
   }
+
 
   // setDefaultLang() {
   //   const arr = Object.keys(this.lang);

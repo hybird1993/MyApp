@@ -27,13 +27,13 @@ export class PagesComponent implements OnInit, OnDestroy {
     new_password: null,
     re_password: null
   };
-  timer;
   sub;
+  modifyPwd: boolean = false;
 
   constructor(private router: Router,
               public translateService: TranslateService,
               private nzI18nService: NzI18nService,
-              private $server: UserService,
+              private $userService: UserService,
               private $message: NzMessageService,
               private $router: Router,
               private modalService: NzModalService,
@@ -53,8 +53,9 @@ export class PagesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const userInfo = sessionStorage.getItem('USER_INFO');
-    this.$server.getUserInfo().then(result => {
+    this.$userService.getUserInfo().then(result => {
       this.user = result.data;
+      this.modifyPwd = (this.user.name).toLowerCase() !== 'admin';
     });
 
     this.sub = this.$mission.userInfoChangeHook.subscribe(data => {
@@ -69,8 +70,6 @@ export class PagesComponent implements OnInit, OnDestroy {
           placeholder: '',
           rules: [{required: true}],
           inputWith: '200px',
-          modelChange: (controls, event) => {
-          }
         },
         {
           key: 'new_password',
@@ -83,24 +82,20 @@ export class PagesComponent implements OnInit, OnDestroy {
             {
               asyncRule: (control: FormControl) => {
                 return Observable.create(observer => {
-                  clearTimeout(this.timer);
-                  this.timer = setTimeout(() => {
-                    const new_pwd = this.config.formGroup.value.new_password;
-                    const re_pwd = this.config.formGroup.value.re_password;
-                    observer.next(!re_pwd || re_pwd === new_pwd ? null : {
-                      error: false,
-                      duplicated: true
-                    });
-                    observer.complete();
-                  }, 0);
+                  const new_pwd = control.value;
+                  const re_pwd = this.config.formGroup.value.re_password;
+                  observer.next(!re_pwd || re_pwd === new_pwd ? null : {
+                    error: false,
+                    duplicated: true
+                  });
+                  observer.complete();
                 });
               },
               asyncCode: 'duplicated',
               msg: '两次密码不一致'
             }
           ],
-          modelChange: (controls, event) => {
-          }
+          relation: ['re_password']
         },
         {
           key: 're_password',
@@ -112,25 +107,23 @@ export class PagesComponent implements OnInit, OnDestroy {
           asyncRules: [
             {
               asyncRule: (control: FormControl) => {
+
                 return Observable.create(observer => {
-                  clearTimeout(this.timer);
-                  this.timer = setTimeout(() => {
-                    const new_pwd = this.config.formGroup.value.new_password;
-                    const re_pwd = this.config.formGroup.value.re_password;
-                    observer.next(re_pwd === new_pwd ? null : {
-                      error: false,
-                      duplicated: true
-                    });
-                    observer.complete();
-                  }, 0);
+
+                  const new_pwd = this.config.formGroup.value.new_password;
+                  const re_pwd = control.value;
+                  observer.next(re_pwd === new_pwd ? null : {
+                    error: false,
+                    duplicated: true
+                  });
+                  observer.complete();
                 });
               },
               asyncCode: 'duplicated',
               msg: '两次密码不一致'
             }
           ],
-          modelChange: (controls, event) => {
-          }
+          relation: ['new_password']
         },
       ],
       labelWidth: '148px',
@@ -187,7 +180,7 @@ export class PagesComponent implements OnInit, OnDestroy {
   loginOut() {
     localStorage.removeItem('auth');
     this.$router.navigate(['/login'], {});
-    // this.$server.loginOut().then(result => {
+    // this.$userService.loginOut().then(result => {
     //   localStorage.removeItem('auth');
     //   this.$router.navigate(['/login'], {});
     // }, err => {
@@ -199,10 +192,17 @@ export class PagesComponent implements OnInit, OnDestroy {
    * 修改资料
    */
   modify() {
+    this.$router.navigate(['pages/user/detail'], {});
+  }
+
+  /**
+   * 修改密码
+   */
+  modifyPassword() {
     this.tplModalButtonLoading = true;
     const oldPwd = this.config.formGroup.value.old_password;
     const newPwd = this.config.formGroup.value.new_password;
-    this.$server.modifyPassword(oldPwd, newPwd).then(result => {
+    this.$userService.modifyPassword(oldPwd, newPwd).then(result => {
         this.$message.success('密码修改成功');
         this.tplModalButtonLoading = false;
         setTimeout(() => {

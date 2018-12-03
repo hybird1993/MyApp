@@ -42,13 +42,13 @@ export class CommonUtils {
    */
   public static dateFormat(fmt, date) {
     const o = {
-      'M+' : date.getMonth() + 1,                 // 月份
-      'd+' : date.getDate(),                    // 日
-      'h+' : date.getHours(),                   // 小时
-      'm+' : date.getMinutes(),                 // 分
-      's+' : date.getSeconds(),                 // 秒
-      'q+' : Math.floor((date.getMonth() + 3) / 3), // 季度
-      'S'  : date.getMilliseconds()             // 毫秒
+      'M+': date.getMonth() + 1,                 // 月份
+      'd+': date.getDate(),                    // 日
+      'h+': date.getHours(),                   // 小时
+      'm+': date.getMinutes(),                 // 分
+      's+': date.getSeconds(),                 // 秒
+      'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+      'S': date.getMilliseconds()             // 毫秒
     };
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
@@ -56,11 +56,48 @@ export class CommonUtils {
 
     for (let k in o) {
       if (new RegExp('(' + k + ')').test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' +  o[k]).length)));
+        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
       }
     }
 
     return fmt;
+  }
+
+  /**
+   * 类型判断
+   * @param data
+   * @returns {string}
+   */
+  private static isPrototype(data) {
+    return Object.prototype.toString.call(data).toLowerCase();
+  }
+
+  public static isArray(data) {
+    return this.isPrototype(data) === '[object array]';
+  }
+
+  public static isJSON(data) {
+    return this.isPrototype(data) === '[object object]';
+  }
+
+  public static isFunction(data) {
+    return this.isPrototype(data) === '[object function]';
+  }
+
+  public static isString(data) {
+    return this.isPrototype(data) === '[object string]';
+  }
+
+  public static isNumber(data) {
+    return this.isPrototype(data) === '[object number]';
+  }
+
+  public static isUndefined(data) {
+    return this.isPrototype(data) === '[object undefined]';
+  }
+
+  public static isNull(data) {
+    return this.isPrototype(data) === '[object null]';
   }
 }
 

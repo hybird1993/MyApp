@@ -40,12 +40,13 @@ export class FormItemConfig extends FormItemOperation {
   prefixTemplate?: any;
   asyncRules?: any;
   suffix?: any;
-  modelChange?: any;
+  // modelChange?: any;
   placeholder?: string;
   labelMsg?: string;
   inputWith?: string = '148px';  // 输入框宽度
   hidden?: boolean = false;
   options?: any;
+  relation?: string[];  // 关联检查
 }
 
 export class FormPropsConfigImpl extends FormPropsConfig {

@@ -21,6 +21,7 @@
                 <input nz-input autocomplete="off"
                        [style.width]="item.inputWith || '160px'"
                        placeholder="{{item.placeholder || lang.input_placeholder | translate}}"
+                       (ngModelChange)="modelChange(_formGroup.controls, $event, item)"
                        formControlName="{{item.key}}"/>
               </div>
               <div *ngSwitchCase="'password'">
@@ -28,10 +29,11 @@
                        [style.width]="item.inputWith || '160px'"
                        type="password"
                        placeholder="{{item.placeholder || lang.input_placeholder | translate}}"
+                       (ngModelChange)="modelChange(_formGroup.controls, $event, item)"
                        formControlName="{{item.key}}"/>
               </div>
               <div *ngSwitchCase="'radio'">
-                <nz-radio-group (ngModelChange)="modelChange(_formGroup.controls, $event, item.key)"
+                <nz-radio-group (ngModelChange)="modelChange(_formGroup.controls, $event, item)"
                                 formControlName="{{item.key}}">
                   <ng-container *ngFor="let option of item.options">
                     <label nz-radio [nzDisabled]="disabled || option.disabled"

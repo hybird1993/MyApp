@@ -32,10 +32,23 @@
     <td>{{data.createTime}}</td>
     <td nzRight="0px">
       <a nz-tooltip nzTitle="{{'edit' | translate}}" class="operate-icon"  (click)="go('/pages/user/detail')"><i class="anticon anticon-edit"></i></a>
-      <a nz-tooltip nzTitle="{{'password_modify' | translate}}" class="operate-icon"><i class="anticon anticon-reload"></i></a>
+      <a nz-tooltip nzTitle="{{'password_modify' | translate}}"  (click)="createTplModal(tplTitle, tplContent, tplFooter, data.id)" class="operate-icon"><i class="anticon anticon-reload"></i></a>
       <a nz-tooltip nzTitle="{{'delete' | translate}}" class="operate-icon" (click)="delete(data.id)"><i class="anticon anticon-delete"></i></a>
     </td>
   </tr>
   </tbody>
 </nz-table>
+
+<ng-template #tplTitle>
+  <span>{{"password_modify" | translate}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <l-form class="login-form" [config]="config" [data]="data">
+  </l-form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="primary" (click)="resetPwd()" [disabled]="!config.formGroup.valid"  [nzLoading]="tplModalButtonLoading">{{"confirm" | translate}}</button>
+  <button nz-button (click)="destroyTplModal()">{{"cancel" | translate}}</button>
+</ng-template>
+
 

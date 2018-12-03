@@ -14,7 +14,7 @@
         <li nz-menu-item>
           <a (click)="modify()">{{"p_info" | translate}}</a>
         </li>
-        <li nz-menu-item>
+        <li nz-menu-item *ngIf="modifyPwd">
           <a (click)="createTplModal(tplTitle, tplContent, tplFooter)">{{"password_modify" | translate}}</a>
         </li>
         <li nz-menu-item>
