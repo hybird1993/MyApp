@@ -1,9 +1,9 @@
 <div class="main-container">
   <div class="login-container">
-    <div class="login-title">{{"user.login" | translate}}</div>
+    <div class="login-title">{{"login.title" | translate}}</div>
     <l-form class="login-form" [config]="config" [data]="data">
     </l-form>
-    <button nz-button class="login-btn" [nzType]="'primary'" (click)="login()" [disabled]="!config.formGroup.valid">{{"login" | translate}}</button>
+    <button nz-button class="login-btn" [nzType]="'primary'" (click)="login()" [disabled]="!config.formGroup.valid">{{"user.login" | translate}}</button>
     <nz-radio-group [(ngModel)]="lang" (ngModelChange)="setDefaultLang()">
       <label nz-radio nzValue="zh">中文</label>
       <label nz-radio nzValue="en">English</label>

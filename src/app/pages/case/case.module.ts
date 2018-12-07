@@ -13,7 +13,6 @@ import { LodashComponent } from './lodash/lodash.component';
 import { LifeCircleComponent } from './life-circle/life-circle.component';
 import { PipeComponent } from './pipe/pipe.component';
 import { ChildComponent } from './life-circle/child/child.component';
-import { ToolComponent } from './tool/tool.component';
 import { QuneeComponent } from './qunee/qunee.component';
 import { VisjsComponent } from './visjs/visjs.component';
 
@@ -35,7 +34,6 @@ import { VisjsComponent } from './visjs/visjs.component';
     LifeCircleComponent,
     PipeComponent,
     ChildComponent,
-    ToolComponent,
     QuneeComponent,
     VisjsComponent,
   ],

@@ -59,7 +59,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   constructor(
     private $userService: UserService,
     private $message: NzMessageService,
-    private $router: Router,
+    public $router: Router,
     public translateService: TranslateService,
     private modalService: NzModalService,
     private formFactory: FormFactory,
@@ -73,7 +73,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           key: 'new_password',
           type: 'password',
           placeholder: '',
-          label: 'new_password',
+          label: 'user.password.new',
           inputWith: '200px',
           rules: [{required: true}],
           asyncRules: [
@@ -99,7 +99,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           key: 're_password',
           type: 'password',
           placeholder: '',
-          label: 'confirm_password',
+          label: 'user.password.confirm',
           inputWith: '200px',
           rules: [{required: true}],
           asyncRules: [
@@ -130,11 +130,11 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    const msg = this.translateService.instant('loading');
+    const msg = this.translateService.instant('common.tips.loading');
     this.loading = true;
     this.$userService.getUsersList(this.params).then(result => {
       this.loading = false;
-      result.data.data.forEach(item => {
+      result.data.data.forEach((item: any) => {
         item.createTime = item.create_time ? this.format('yyyy/MM/dd hh:mm:ss', new Date(item.create_time)) : '';
       });
       this.dataSet = result.data.data;
@@ -147,8 +147,9 @@ export class UserListComponent implements OnInit, OnDestroy {
     });
   }
 
-  go(url) {
-    this.$router.navigate([url]);
+  go(id) {
+    const url = `/pages/user/detail/${id}`;
+    this.$router.navigate([url], {});
   }
 
   refreshStatus(): void {
@@ -219,7 +220,9 @@ export class UserListComponent implements OnInit, OnDestroy {
   destroyTplModal() {
     window.setTimeout(() => {
       this.tplModalButtonLoading = false;
-      this.tplModal.destroy();
+      if (this.tplModal) {
+        this.tplModal.destroy();
+      }
     }, 0);
   }
 

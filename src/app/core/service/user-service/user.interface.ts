@@ -47,10 +47,17 @@ export  interface  UserInterface {
   modify(params: User): Promise<Result<any>>;
 
   /**
-   * 获取用户信息
+   * 获取当前用户信息
    * @returns {Promise<Result<any>>}
    */
   getUserInfo(): Promise<Result<any>>;
+
+  /**
+   * 通过id获取用户信息
+   * @returns {Promise<Result<any>>}
+   */
+  getUserInfoById(id: number): Promise<Result<any>>;
+
 
   /**
    * 删除用户
@@ -58,6 +65,13 @@ export  interface  UserInterface {
    * @returns {Promise<Result<any>>}
    */
   deleteUsers(ids: string | number[]): Promise<Result<any>>;
+
+  /**
+   * 修改用户信息
+   * @param {User} user
+   * @returns {Promise<Result<any>>}
+   */
+  modifyUser(user: User): Promise<Result<any>>;
 
   /**
    * 修改密码

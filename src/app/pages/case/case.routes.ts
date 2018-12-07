@@ -9,17 +9,12 @@ import {TypescriptComponent} from './typescript/typescript.component';
 import {LodashComponent} from './lodash/lodash.component';
 import {LifeCircleComponent} from './life-circle/life-circle.component';
 import {PipeComponent} from './pipe/pipe.component';
-import {ToolComponent} from './tool/tool.component';
 // import {QuneeComponent} from './qunee/qunee.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: CaseComponent,
-  },
-  {
-    path: 'tool',
-    component: ToolComponent
   },
   {
     path: 'reactive-form',

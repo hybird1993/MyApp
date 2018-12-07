@@ -5,9 +5,7 @@ import {EntitiesResult, Result} from '../Result';
 import {User} from '../../models/user';
 import {QueryParams} from '../QueryParams';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService implements UserInterface {
 
   constructor(
@@ -70,9 +68,25 @@ export class UserService implements UserInterface {
     });
   }
 
+  getUserInfoById(id): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.get(`/api/user/getUserInfo/${id}`).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
   deleteUsers(ids): Promise<Result<any>> {
     return new Promise((resolve, reject) => {
       this.$http.post(`/api/user/delete`, {ids}).subscribe((result: Result<any>) => {
+        result.code === 0 ? resolve(result) : reject(result);
+      });
+    });
+  }
+
+  modifyUser(user: User): Promise<Result<any>> {
+    return new Promise((resolve, reject) => {
+      this.$http.post(`/api/user/modify`, user).subscribe((result: Result<any>) => {
         result.code === 0 ? resolve(result) : reject(result);
       });
     });

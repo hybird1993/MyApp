@@ -1,0 +1,18 @@
+<div class="transform">
+  <h1>{{"tools.transform.title" | translate}}</h1>
+  <nz-input-group nzSearch [nzSuffix]="suffixButton">
+    <input type="text" nz-input placeholder="{{'tools.transform.placeholder' | translate}}" (ngModelChange)="getUnicode($event)"  [ngModel]="word">
+  </nz-input-group>
+  <div style="margin: 10px 0;">
+    <span>{{"tools.transform.result" | translate}}</span>
+    <button style="float: right;" nz-button nzType="primary" (click)="copy()">{{"common.operate.copy" | translate}}</button>
+  </div>
+  <textarea>{{result}}</textarea>
+</div>
+
+<input type="text" name="selectCopy" id="selectCopy" ng-model="copyvalue" style="position: absolute;left:-1100px;bottom:-100px">
+
+<ng-template #suffixButton>
+  <button nz-button nzType="primary"  nzSearch (click)="getUnicode()">{{"tools.transform.transform" | translate}}</button>
+</ng-template>
+

@@ -60,7 +60,7 @@ export class UserInsertComponent implements OnInit {
         {
           key: 'password',
           type: 'password',
-          label: 'password',
+          label: 'user.password.password',
           required: true,
           inputWith: '200px',
           rules: [{required: true}],
@@ -84,14 +84,15 @@ export class UserInsertComponent implements OnInit {
 
     this.buttons = [
       {
-        text: 'save',
+        text: 'common.operate.save',
         check: true,
+        type: 'primary',
         clickEvent: () => {
           this.save();
         }
       },
       {
-        text: 'back',
+        text: 'common.operate.back',
         clickEvent: () => {
           this.$router.navigate(['/pages/user/list']);
         }

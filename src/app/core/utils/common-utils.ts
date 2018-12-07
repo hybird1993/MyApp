@@ -24,17 +24,6 @@ export class CommonUtils {
   }
 
   /**
-   *获取字符串unicode编码
-   */
-  public static getUnicode(string) {
-    let str = '';
-    for (let s of string) {
-      str += '\\u' + s.codePointAt(0).toString(16).padStart(4, 0);
-    }
-    return str;
-  }
-
-  /**
    * 日期格式化
    * @param fmt
    * @param date

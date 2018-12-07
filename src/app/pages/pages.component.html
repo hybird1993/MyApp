@@ -8,17 +8,17 @@
     </nz-radio-group>
     <nz-dropdown [nzPlacement]="'bottomCenter'" style="width: 100px;text-align: center">
       <a nz-dropdown>
-        <nz-avatar [nzText]="user.nickname || user.name" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>
+        <nz-avatar nz-tooltip [nzTitle]="fullname" nzPlacement="left" [nzText]="name" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>
       </a>
       <ul nz-menu nzSelectable style="margin-top: 10px;">
         <li nz-menu-item>
-          <a (click)="modify()">{{"p_info" | translate}}</a>
+          <a (click)="modify()">{{"user.info" | translate}}</a>
         </li>
         <li nz-menu-item *ngIf="modifyPwd">
-          <a (click)="createTplModal(tplTitle, tplContent, tplFooter)">{{"password_modify" | translate}}</a>
+          <a (click)="createTplModal(tplTitle, tplContent, tplFooter)">{{"user.password.modify" | translate}}</a>
         </li>
         <li nz-menu-item>
-          <a (click)="loginOut()">{{"loginOut" | translate}}</a>
+          <a (click)="loginOut()">{{"user.loginOut" | translate}}</a>
         </li>
       </ul>
     </nz-dropdown>
@@ -28,16 +28,19 @@
 <div class="content">
   <div class="content-menu">
     <ul nz-menu [nzMode]="'inline'" style="width: 240px;">
-      <li nz-menu-item (click)="go('case')">
-        <span title><i class="anticon anticon-layout"></i>{{"menu-case" | translate}}</span>
+      <li *ngIf="user.name === 'admin'" nz-menu-item (click)="go('case')">
+        <span title><i nz-icon type="layout" theme="outline"></i>{{"menu.case" | translate}}</span>
       </li>
       <li nz-submenu>
-        <span title><i class="anticon anticon-user"></i>{{"user.userManager" | translate}}</span>
+        <span title><i nz-icon type="user" theme="outline"></i>{{"menu.user.manager" | translate}}</span>
         <ul>
-          <li nz-menu-item (click)="go('user/list')">{{"user.userList" | translate}}</li>
+          <li nz-menu-item (click)="go('user/list')">{{"menu.user.list" | translate}}</li>
           <!--<li nz-menu-item>Option 10</li>-->
           <!--<li nz-menu-item>Option 11</li>-->
         </ul>
+      </li>
+      <li nz-menu-item (click)="go('tools')">
+        <span title><i nz-icon type="tool" theme="outline"></i>{{"menu.tools" | translate}}</span>
       </li>
       <!--<li nz-submenu>-->
         <!--<span title><i class="anticon anticon-mail"></i> Navigation One</span>-->
@@ -79,15 +82,15 @@
   </div>
 </div>
 <ng-template #tplTitle>
-  <span>{{"password_modify" | translate}}</span>
+  <span>{{"user.password.modify" | translate}}</span>
 </ng-template>
 <ng-template #tplContent>
   <l-form class="login-form" [config]="config" [data]="data">
   </l-form>
 </ng-template>
 <ng-template #tplFooter>
-  <button nz-button nzType="primary" (click)="modify()" [disabled]="!config.formGroup.valid"  [nzLoading]="tplModalButtonLoading">{{"confirm" | translate}}</button>
-  <button nz-button (click)="destroyTplModal()">{{"cancel" | translate}}</button>
+  <button nz-button nzType="primary" (click)="modifyPassword()" [disabled]="!config.formGroup.valid"  [nzLoading]="tplModalButtonLoading">{{"common.operate.confirm" | translate}}</button>
+  <button nz-button (click)="destroyTplModal()">{{"common.operate.cancel" | translate}}</button>
 </ng-template>
 
 

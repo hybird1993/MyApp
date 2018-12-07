@@ -40,6 +40,7 @@ export class FormItemConfig extends FormItemOperation {
   prefixTemplate?: any;
   asyncRules?: any;
   suffix?: any;
+  disabled?: boolean = false;
   // modelChange?: any;
   placeholder?: string;
   labelMsg?: string;
@@ -59,8 +60,8 @@ export class FormPropsConfigImpl extends FormPropsConfig {
           let items = [];
          // console.log(config[key]);
           config[key].forEach(item => {
-            console.log(item);
-            console.log(item instanceof FormItemConfig);
+            // console.log(item);
+            // console.log(item instanceof FormItemConfig);
             items.push(item);
             // TODO
             // if (item instanceof FormItemConfig) {

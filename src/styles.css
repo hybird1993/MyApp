@@ -23,3 +23,8 @@ input::-moz-placeholder {  /* Mozilla Firefox 19+ */
 input:-ms-input-placeholder {  /* Internet Explore 10+ */
   font-size: 12px;
 }
+
+input[disabled] {
+  background-color: white;
+  color: rgba(0,0,0,.65);
+}

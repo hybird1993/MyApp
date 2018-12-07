@@ -28,21 +28,21 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang') || 'zh';
-    this.setDefaultLang();
+   // this.setDefaultLang();
     this.config = this.formFactory.createForm({
       items: [
         {
           key: 'username',
           type: 'input',
           removeLabel: true,
-          placeholder: 'placeholder.username',
+          placeholder: 'login.placeholder.username',
           rules: [{required: true}],
           inputWith: '200px',
         },
         {
           key: 'password',
           type: 'password',
-          placeholder: 'placeholder.password',
+          placeholder: 'login.placeholder.password',
           removeLabel: true,
           inputWith: '200px',
           rules: [{required: true}],

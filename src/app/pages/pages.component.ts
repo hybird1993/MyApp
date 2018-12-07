@@ -29,6 +29,8 @@ export class PagesComponent implements OnInit, OnDestroy {
   };
   sub;
   modifyPwd: boolean = false;
+  name;
+  fullname;
 
   constructor(private router: Router,
               public translateService: TranslateService,
@@ -56,6 +58,9 @@ export class PagesComponent implements OnInit, OnDestroy {
     this.$userService.getUserInfo().then(result => {
       this.user = result.data;
       this.modifyPwd = (this.user.name).toLowerCase() !== 'admin';
+      this.fullname = this.user.nickname ? this.user.nickname :
+        this.user.name ? this.user.name : '';
+      this.name = this.fullname.substr(0, 1);
     });
 
     this.sub = this.$mission.userInfoChangeHook.subscribe(data => {

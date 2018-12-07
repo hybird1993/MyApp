@@ -1,5 +1,5 @@
-<button nz-button [nzType]="'primary'" (click)="go('/pages/user/insert')" style="margin: 0 10px 20px 0">{{"add" | translate}}</button>
-<button nz-button [nzType]="'primary'" [disabled]="!this.allChecked && !this.indeterminate" (click)="deleteUsers()" style="margin: 0 10px 20px 0">{{"delete" | translate}}</button>
+<button nz-button [nzType]="'primary'" routerLink="/pages/user/insert" style="margin: 0 10px 20px 0">{{"common.operate.add" | translate}}</button>
+<button nz-button [nzType]="'primary'" [disabled]="!this.allChecked && !this.indeterminate" (click)="deleteUsers()" style="margin: 0 10px 20px 0">{{"common.operate.delete" | translate}}</button>
 
 <nz-table #nzTable
           [nzData]="dataSet"
@@ -18,7 +18,7 @@
     <th nzWidth="200px">{{"user.nickname" | translate}}</th>
     <th nzWidth="300px">{{"user.email" | translate}}</th>
     <th nzWidth="400px">{{"user.createTime" | translate}}</th>
-    <th nzWidth="200px" nzRight="0px">{{"operate" | translate}}</th>
+    <th nzWidth="200px" nzRight="0px">{{"common.operate.operate" | translate}}</th>
   </tr>
   </thead>
   <tbody>
@@ -31,9 +31,9 @@
     <td>{{data.email}}</td>
     <td>{{data.createTime}}</td>
     <td nzRight="0px">
-      <a nz-tooltip nzTitle="{{'edit' | translate}}" class="operate-icon"  (click)="go('/pages/user/detail')"><i class="anticon anticon-edit"></i></a>
-      <a nz-tooltip nzTitle="{{'password_modify' | translate}}"  (click)="createTplModal(tplTitle, tplContent, tplFooter, data.id)" class="operate-icon"><i class="anticon anticon-reload"></i></a>
-      <a nz-tooltip nzTitle="{{'delete' | translate}}" class="operate-icon" (click)="delete(data.id)"><i class="anticon anticon-delete"></i></a>
+      <a nz-tooltip nzTitle="{{'common.operate.edit' | translate}}" class="operate-icon"  (click)="go(data.id)"><i nz-icon type="edit" theme="outline"></i></a>
+      <a nz-tooltip nzTitle="{{'user.password.reset' | translate}}"  (click)="createTplModal(tplTitle, tplContent, tplFooter, data.id)" class="operate-icon"><i nz-icon type="reload" theme="outline"></i></a>
+      <a nz-tooltip nzTitle="{{'common.operate.delete' | translate}}" class="operate-icon" (click)="delete(data.id)"><i nz-icon type="delete" theme="outline"></i></a>
     </td>
   </tr>
   </tbody>
