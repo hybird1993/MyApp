@@ -172,11 +172,11 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
         lnglat: l,
         info: {
           id: i,
-          name: `${i}号箱`,
+          name: `${(i + '').padStart(6, '0')}号箱`,
           type: Math.ceil(randomType * 4),
           number: (i + '').padStart(6, 0),
           area: i,
-          address: `区域${i}的${(i + '').padStart(6, 0)}号箱的地理位置`,
+          address: `区域${i}的${(i + '').padStart(6, '0')}号箱的地理位置`,
           status:  Math.ceil(randomStatus * 4)
         }
       };
