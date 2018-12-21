@@ -51,6 +51,8 @@ export class LoginComponent implements OnInit {
       labelWidth: 148,
       labelAlign: 'left',
     });
+    const a = this.$userService.getFile();
+    console.log(a);
   }
 
   login() {

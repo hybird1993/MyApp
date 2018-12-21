@@ -7,7 +7,6 @@ import { TemplateDrivenFormComponent } from './template-driven-form';
 import { ReactiveFormComponent } from './reactive-form';
 import { MyFormComponent } from './my-form';
 import { RxjsComponent } from './rxjs/rxjs.component';
-import { MarkerMapComponent } from './marker-map/marker-map.component';
 import { TypescriptComponent } from './typescript/typescript.component';
 import { LodashComponent } from './lodash/lodash.component';
 import { LifeCircleComponent } from './life-circle/life-circle.component';
@@ -28,7 +27,6 @@ import { VisjsComponent } from './visjs/visjs.component';
     MyFormComponent,
     RxjsComponent,
     QuneeComponent,
-    MarkerMapComponent,
     TypescriptComponent,
     LodashComponent,
     LifeCircleComponent,

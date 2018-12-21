@@ -1,0 +1,19 @@
+<div #container id="container"></div>
+<div class="device-type">
+  <!--<div *ngFor="let item of DEVICETYPE">{{item.name}}</div>-->
+  <nz-checkbox-group [ngModel]="DEVICETYPE"  (ngModelChange)="deviceTypeChange($event)">
+  </nz-checkbox-group>
+</div>
+<div class="device-status">
+  <!--<div *ngFor="let item of DEVICETYPE">{{item.name}}</div>-->
+  <nz-checkbox-group [ngModel]="DEVICESTATUS"  (ngModelChange)="deviceStatusChange($event)">
+  </nz-checkbox-group>
+</div>
+<div class="data-count">
+  数据来源切换：&nbsp;&nbsp;
+  <nz-radio-group [(ngModel)]="dataCount"  (ngModelChange)="dataCountChange($event)">
+    <ng-container *ngFor="let option of DATASOURCE">
+      <label nz-radio [nzValue]="option.value">{{option.label}}</label>
+    </ng-container>
+  </nz-radio-group>
+</div>

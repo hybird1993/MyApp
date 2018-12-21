@@ -36,7 +36,8 @@
     "user": {
       "manager": "User manager",
       "list": "User list"
-    }
+    },
+    "map": "Map"
   },
   "user": {
     "username": "Username",

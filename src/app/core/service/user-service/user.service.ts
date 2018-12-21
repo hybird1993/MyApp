@@ -108,4 +108,9 @@ export class UserService implements UserInterface {
     });
   }
 
+  async getFile() {
+     // return await this.$http.get(`../../../../assets/offline-map/map_load.js`);
+    return await this.$http.get(`/api/user/checkUserName/admin`);
+  }
+
 }

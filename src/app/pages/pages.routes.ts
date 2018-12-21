@@ -9,6 +9,7 @@ export const routes: Routes = [
     children: [
       { path: 'case', loadChildren: './case#CaseModule' },
       { path: 'user', loadChildren: './user#UserModule' },
+      { path: 'map', loadChildren: './map#MapModule' },
       { path: 'tools', component: ToolsComponent },
     ]
   },

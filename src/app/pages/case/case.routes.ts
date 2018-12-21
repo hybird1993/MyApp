@@ -4,7 +4,7 @@ import {ReactiveFormComponent} from './reactive-form';
 import {TemplateDrivenFormComponent} from './template-driven-form';
 import {MyFormComponent} from './my-form';
 import {RxjsComponent} from './rxjs/rxjs.component';
-// import {MarkerMapComponent} from './marker-map/marker-map.component';
+import {MarkerMapComponent} from '../map/marker-map/marker-map.component';
 import {TypescriptComponent} from './typescript/typescript.component';
 import {LodashComponent} from './lodash/lodash.component';
 import {LifeCircleComponent} from './life-circle/life-circle.component';
@@ -32,10 +32,6 @@ export const routes: Routes = [
     path: 'rxjs',
     component: RxjsComponent
   },
-  // {
-  //   path: 'marker-map',
-  //   component: MarkerMapComponent
-  // },
   {
     path: 'typescript',
     component: TypescriptComponent

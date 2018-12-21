@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
 
@@ -8,15 +8,12 @@ import {Router} from '@angular/router';
   styleUrls: ['./case.component.scss']
 })
 export class CaseComponent implements OnInit {
- datas = [
- ];
+  datas = [];
 
- btns = [];
+  btns = [];
 
-  constructor(
-    public translateService: TranslateService,
-    private $router: Router
-  ) {
+  constructor(public translateService: TranslateService,
+              private $router: Router) {
     this.setDatas();
   }
 
@@ -25,8 +22,8 @@ export class CaseComponent implements OnInit {
       .subscribe(() => {
         this.setDatas();
       });
-    this.btns = ['reactive-form', 'template-driven-form', 'my-form', 'rxjs', 'http',
-      'marker-map', 'typescript', 'lodash', 'life-circle', 'pipe', 'qunee'];
+    this.btns = ['reactive-form', 'template-driven-form', 'my-form',
+      'rxjs', 'http', 'typescript', 'lodash', 'life-circle', 'pipe', 'qunee'];
   }
 
   setDatas() {

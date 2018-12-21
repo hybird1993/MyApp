@@ -1,4 +1,8 @@
 {
+  "/tiles": {
+    "target": "http://47.105.153.92:8081",
+    "secure": false
+  },
   "/": {
      "target": "http://47.105.153.92:3302",
      "secure": false
