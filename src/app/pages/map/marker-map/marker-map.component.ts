@@ -71,7 +71,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cluster = [];
   }
 
-  dataCountChange() {
+  dataCountChange(event) {
     this.markerClusterer.clearMarkers();
     if (this.dataCount === 0) {
       this.addMarkers();
