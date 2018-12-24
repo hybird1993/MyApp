@@ -36,7 +36,6 @@ bmapcfg.home = JS__FILE__.substr(0, JS__FILE__.lastIndexOf("/")+1); //地图API�
     document.write('<script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>');
    // document.write('<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>');
     document.write('<script type="text/javascript" src="'+bmapcfg.home + 'MarkerClusterer.js"></script>');
-    //  document.write('<script type="text/javascript" src="'+bmapcfg.home+'modules/MarkerClusterer_min.js"></script>');
   }
 
 })();

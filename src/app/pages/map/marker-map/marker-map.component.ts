@@ -1,7 +1,8 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { points  } from './mock-data';
 import { MapConfig } from './config';
-import { DeviceStatus, DeviceType } from './device';
+import { FacilityStatus, FacilityType } from './facility';
+import {CommonUtils} from '../../../core/utils/common-utils';
 
 declare let AMap: any;    // 一定要声明AMap，要不然报错找不到AMap
 declare let BMap: any;
@@ -24,6 +25,10 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   scaleControl;
   navigationControl;
   markerClusterer;
+  facilityStatus;
+  facilityType;
+  typeArr = [];
+  statusArr = [];
   DEVICESTATUS = [
     {value: 1, label: '正常', checked: true},
     {value: 2, label: '非法开门', checked: true},
@@ -46,14 +51,26 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
   dataCount = MapConfig.randomMarkersNum;
   _points;
-  typeArr = [];
-  statusArr = [];
+  markerOpt = {
+    width : 300,     // 信息窗口宽度
+    // height: 200,     // 信息窗口高度
+    title : '设施情况' , // 信息窗口标题
+  };
+  isShowFacilityPanel = false;
+  isExpandLogicArea = false;
+  isExpandFacilityList = false;
+  isExpandMyCollection = false;
+  tabs = [
+    {value: 'info', label: '设施信息'},
+    {value: 'alarm', label: '告警'},
+    {value: 'log', label: '日志'},
+  ];
+  selectedIndex = 0;
   constructor(
   ) { }
 
   ngOnInit() {
-    this.typeArr = this.DEVICETYPE.map(item => item.value);
-    this.statusArr = this.DEVICESTATUS.map(item => item.value);
+    this.resetFilter();
     this.initBaiduMap();
     // this.initGaodeMap();
   }
@@ -69,15 +86,6 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.markers = [];
     this.cluster = [];
-  }
-
-  dataCountChange(event) {
-    this.markerClusterer.clearMarkers();
-    if (this.dataCount === 0) {
-      this.addMarkers();
-    } else {
-      this.addRandomMarks();
-    }
   }
 
   /**
@@ -97,7 +105,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.addNavigationControl();
 
-    this.addOverviewMapControl();
+    // this.addOverviewMapControl();
 
     this.addCitysControl();
 
@@ -128,19 +136,8 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       pt = new BMap.Point(...l);
       const marker = new BMap.Marker(pt);
       marker.info = point.info;
-      marker.enableDragging();
-      marker.addEventListener('dragend', e => {
-        console.log('当前位置：' + e.point.lng + ',' + e.point.lat);
-      }, {capture: true, passive: true});
-      marker.addEventListener('mouseover', e => {
-        const _marker = new BMap.Point(e.point.lng, e.point.lat);
-        const infoWindow = new BMap.InfoWindow(this.setContent('m', e.target.info), opts);  // 创建信息窗口对象
-        this.map.openInfoWindow(infoWindow, _marker); // 开启信息窗口
-      });
-      marker.addEventListener('mouseout', e => {
-        this.map.closeInfoWindow(); // 关闭信息窗口
-      });
-
+     // marker.enableDragging();
+      this.addEventListener(marker);
       markers.push(marker);
     }
     // 最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
@@ -154,11 +151,6 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   addRandomMarks() {
     let maxLng, minLng, maxLat, minLat;
-    const opts = {
-      width : 300,     // 信息窗口宽度
-      // height: 200,     // 信息窗口高度
-      title : '设施情况' , // 信息窗口标题
-    };
     let markers = [];
     let pt = null;
     let __points = [];
@@ -188,22 +180,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       pt = new BMap.Point(...l);
       const marker = new BMap.Marker(pt);
       marker.info = point.info;
-      marker.addEventListener('dragend', e => {
-        console.log('当前位置：' + e.point.lng + ',' + e.point.lat);
-      }, {capture: true, passive: true});
-      marker.addEventListener('mouseover', e => {
-        const _marker = new BMap.Point(e.point.lng, e.point.lat);
-        const infoWindow = new BMap.InfoWindow(this.setContent('m', e.target.info), opts);  // 创建信息窗口对象
-        this.map.openInfoWindow(infoWindow, _marker); // 开启信息窗口
-      });
-      marker.addEventListener('mouseout', e => {
-        this.map.closeInfoWindow(); // 关闭信息窗口
-      });
-      marker.addEventListener('click', e => {
-        const _marker = new BMap.Point(e.point.lng, e.point.lat);
-        const infoWindow = new BMap.InfoWindow(this.setContent('m', e.target.info), opts);  // 创建信息窗口对象
-        this.map.openInfoWindow(infoWindow, _marker); // 开启信息窗口
-      });
+      this.addEventListener(marker);
       markers.push(marker);
     }
     this._points = __points.concat([]);
@@ -213,6 +190,12 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {markers: markers, maxZoom: MapConfig.maxZoom}, this.callback);
   }
 
+  /**
+   * 自定义的聚合点事件回调
+   * @param event
+   * @param markers
+   * @param map
+   */
   callback = (event, markers, map) => {
     const marker = new BMap.Point(event.point.lng, event.point.lat);
     const type = event.type;
@@ -247,11 +230,11 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     let str = '';
     if (type === 'm') { // 覆盖物
       str = `<div>设施名称：${data.name}</div>
-      <div>类型：${DeviceType[data.type]}</div>
+      <div>类型：${FacilityType[data.type]}</div>
       <div>编号：${data.number}</div>
       <div>区域：${data.area}</div>
       <div>详细地址：${data.address}</div>
-      <div>当前状态：${DeviceStatus[data.status]}</div>`;
+      <div>当前状态：${FacilityStatus[data.status]}</div>`;
     } else if (type === 'c') { // 聚合点   数组
       console.log(data);
       let obj = {};
@@ -317,8 +300,12 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.addControl(new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1}));
   }
 
+  /**
+   * 添加地图类型控件
+   */
   addMapTypeControl() {
     this.map.addControl(new BMap.MapTypeControl({
+      anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
       mapTypes: [
         BMAP_NORMAL_MAP,
         BMAP_HYBRID_MAP
@@ -369,15 +356,15 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * 设备类型过滤
+   * 设施类型过滤
    * @param event
    */
-  deviceTypeChange(event) {
+  facilityTypeChange(event) {
     // console.log(event);
     let arr = [];
-    event.forEach(device => {
-      if (device.checked) {
-        arr.push(device.value);
+    event.forEach(facility => {
+      if (facility.checked) {
+        arr.push(facility.value);
       }
     });
     this.typeArr = arr;
@@ -385,19 +372,43 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * 设备状态过滤
+   * 设施状态过滤
    * @param event
    */
-  deviceStatusChange(event) {
+  facilityStatusChange(event) {
     console.log(event);
     let arr = [];
-    event.forEach(device => {
-      if (device.checked) {
-        arr.push(device.value);
+    event.forEach(facility => {
+      if (facility.checked) {
+        arr.push(facility.value);
       }
     });
     this.statusArr = arr;
     this.updataMarkers();
+  }
+
+  /**
+   * 随机点生成数目裱花
+   * @param event
+   */
+  dataCountChange(event) {
+    this.markerClusterer.clearMarkers();
+    if (this.dataCount === 0) {
+      this.addMarkers();
+    } else {
+      this.addRandomMarks();
+    }
+    this.resetFilter();
+  }
+
+  /**
+   * 重置过滤条件
+   */
+  resetFilter() {
+    this.facilityType = CommonUtils.deepClone(this.DEVICETYPE);
+    this.facilityStatus = CommonUtils.deepClone(this.DEVICESTATUS);
+    this.typeArr = this.facilityType.map(item => item.value);
+    this.statusArr = this.facilityStatus.map(item => item.value);
   }
 
   /**
@@ -418,19 +429,8 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
         pt = new BMap.Point(...l);
         const marker = new BMap.Marker(pt);
         marker.info = info;
-        marker.enableDragging();
-        marker.addEventListener('dragend', e => {
-          console.log('当前位置：' + e.point.lng + ',' + e.point.lat);
-        }, {capture: true, passive: true});
-        marker.addEventListener('mouseover', e => {
-          const _marker = new BMap.Point(e.point.lng, e.point.lat);
-          const infoWindow = new BMap.InfoWindow(this.setContent('m', e.target.info), opts);  // 创建信息窗口对象
-          this.map.openInfoWindow(infoWindow, _marker); // 开启信息窗口
-        });
-        marker.addEventListener('mouseout', e => {
-          this.map.closeInfoWindow(); // 关闭信息窗口
-        });
-
+        // marker.enableDragging();
+        this.addEventListener(marker);
         markers.push(marker);
       }
 
@@ -441,6 +441,28 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log(markers);
     this.markerClusterer.clearMarkers();
     this.markerClusterer.addMarkers(markers);
+  }
+
+  /**
+   * marker添加事件
+   * @param target
+   */
+  addEventListener(target) {
+    target.addEventListener('dragend', e => {
+      console.log('当前位置：' + e.point.lng + ',' + e.point.lat);
+    }, {capture: true, passive: true});
+    target.addEventListener('mouseover', e => {
+      const _marker = new BMap.Point(e.point.lng, e.point.lat);
+      const infoWindow = new BMap.InfoWindow(this.setContent('m', e.target.info), this.markerOpt);  // 创建信息窗口对象
+      this.map.openInfoWindow(infoWindow, _marker); // 开启信息窗口
+    });
+    target.addEventListener('mouseout', e => {
+      this.map.closeInfoWindow(); // 关闭信息窗口
+    });
+    target.addEventListener('click', e => {
+      this.isShowFacilityPanel = true;
+
+    });
   }
 
   /**
@@ -478,6 +500,13 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  changeTab(tab) {
+    console.log(tab);
+  }
+
+  closeFacilityPanel() {
+    this.isShowFacilityPanel = false;
+  }
 
   /**
    * 初始化高德地图

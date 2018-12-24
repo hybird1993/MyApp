@@ -1,19 +1,67 @@
 <div #container id="container"></div>
-<div class="device-type">
-  <!--<div *ngFor="let item of DEVICETYPE">{{item.name}}</div>-->
-  <nz-checkbox-group [ngModel]="DEVICETYPE"  (ngModelChange)="deviceTypeChange($event)">
+<div class="facility-type">
+  <!--<div *ngFor="let item of facilityTYPE">{{item.name}}</div>-->
+  <nz-checkbox-group [ngModel]="facilityType"  (ngModelChange)="facilityTypeChange($event)">
   </nz-checkbox-group>
 </div>
-<div class="device-status">
-  <!--<div *ngFor="let item of DEVICETYPE">{{item.name}}</div>-->
-  <nz-checkbox-group [ngModel]="DEVICESTATUS"  (ngModelChange)="deviceStatusChange($event)">
+<div class="facility-status">
+  <!--<div *ngFor="let item of facilityTYPE">{{item.name}}</div>-->
+  <nz-checkbox-group [ngModel]="facilityStatus"  (ngModelChange)="facilityStatusChange($event)">
   </nz-checkbox-group>
 </div>
 <div class="data-count">
-  数据来源切换：&nbsp;&nbsp;
+  <div>数据来源切换：</div>
   <nz-radio-group [(ngModel)]="dataCount"  (ngModelChange)="dataCountChange($event)">
     <ng-container *ngFor="let option of DATASOURCE">
-      <label nz-radio [nzValue]="option.value">{{option.label}}</label>
+      <div>
+        <label nz-radio [nzValue]="option.value">{{option.label}}</label>
+      </div>
     </ng-container>
   </nz-radio-group>
+</div>
+<div *ngIf="isShowFacilityPanel" class="facility-panel">
+  <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzSelectedIndex] = "selectedIndex">
+    <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab.label" (nzClick)="changeTab(tab)">
+      <app-facility-panel></app-facility-panel>
+    </nz-tab>
+  </nz-tabset>
+  <div class="facility-panel-close" (click)="closeFacilityPanel()">
+    <i nz-icon type="close" theme="outline"></i>
+  </div>
+</div>
+<div class="logic-area" [ngStyle]="{'width': isExpandLogicArea ? '400px' : '130px'}">
+  <div class="title" (click)="isExpandLogicArea = !isExpandLogicArea">
+    逻辑区域树
+    <div class="operate-icon">
+      <i *ngIf="!isExpandLogicArea" nz-icon type="down" theme="outline"></i>
+      <i *ngIf="isExpandLogicArea" nz-icon type="up" theme="outline"></i>
+    </div>
+  </div>
+  <div *ngIf="isExpandLogicArea">
+    <app-logic-area></app-logic-area>
+  </div>
+</div>
+<div class="facility-list" [ngStyle]="{'width': isExpandFacilityList ? '400px' : '130px'}">
+  <div class="title" (click)="isExpandFacilityList = !isExpandFacilityList">
+    设施列表
+    <div class="operate-icon">
+      <i *ngIf="!isExpandFacilityList" nz-icon type="down" theme="outline"></i>
+      <i *ngIf="isExpandFacilityList" nz-icon type="up" theme="outline"></i>
+    </div>
+  </div>
+  <div *ngIf="isExpandFacilityList">
+    <app-facility-list></app-facility-list>
+  </div>
+</div>
+<div class="my-collection" [ngStyle]="{'width': isExpandMyCollection ? '400px' : '130px'}">
+  <div class="title" (click)="isExpandMyCollection = !isExpandMyCollection">
+    我的收藏
+    <div class="operate-icon">
+      <i *ngIf="!isExpandMyCollection" nz-icon type="down" theme="outline"></i>
+      <i *ngIf="isExpandMyCollection" nz-icon type="up" theme="outline"></i>
+    </div>
+  </div>
+  <div *ngIf="isExpandMyCollection">
+    <app-my-collection></app-my-collection>
+  </div>
 </div>

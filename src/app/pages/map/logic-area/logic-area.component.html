@@ -1,0 +1,13 @@
+<div style="height:217px; overflow: auto">
+  <nz-tree
+    [nzData]="nodes"
+    nzCheckable="true"
+    nzMultiple="true"
+    [nzCheckedKeys]="defaultCheckedKeys"
+    [nzExpandedKeys]="defaultExpandedKeys"
+    [nzSelectedKeys]="defaultSelectedKeys"
+    (nzClick)="nzEvent($event)"
+    (nzExpandChange)="nzEvent($event)"
+    (nzCheckBoxChange)="nzEvent($event)">
+  </nz-tree>
+</div>

@@ -84,4 +84,16 @@ export const points = [
       status: 2
     }
   },
+  {
+    lnglat: [114.3302130000, 30.3697100000],
+    info: {
+      id: 8,
+      name: '8号箱',
+      type: 1,
+      number: '008',
+      area: 6,
+      address: '区域6的6号箱的地理位置',
+      status: 2
+    }
+  },
 ];

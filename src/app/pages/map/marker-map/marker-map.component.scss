@@ -7,10 +7,10 @@
   width: 100%;
   height: auto;
 }
-.device-type {
+.facility-type {
   position: absolute;
-  top: 50px;
-  right: 25px;
+  bottom: 80px;
+  left: 20px;
   z-index: 10;
   border: 1px solid gray;
   width: auto;
@@ -19,10 +19,10 @@
   padding: 10px;
   background-color: white;
 }
-.device-status {
+.facility-status {
   position: absolute;
-  top: 120px;
-  right: 25px;
+  bottom: 20px;
+  left: 20px;
   z-index: 10;
   border: 1px solid gray;
   width: auto;
@@ -30,11 +30,24 @@
   border-radius: 5px;
   padding: 10px;
   background-color: white;
+}
+.facility-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 500px;
+  bottom: 10px;
+  z-index: 20;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+  overflow: auto;
 }
 .data-count {
   position: absolute;
-  bottom: 20px;
-  left: 100px;
+  top: 20px;
+  right: 20px;
   z-index: 10;
   border: 1px solid gray;
   width: auto;
@@ -42,4 +55,58 @@
   border-radius: 5px;
   padding: 10px;
   background-color: white;
+}
+.logic-area {
+  position: absolute;
+  left: 80px;
+  top: 50px;
+  width: 400px;
+  max-height: 260px;
+  height: auto;
+  z-index: 10;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.facility-list {
+  position: absolute;
+  top: 330px;
+  left: 80px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: 400px;
+  max-height: 260px;
+  height: auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.my-collection {
+  position: absolute;
+  top: 50px;
+  left: 500px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: 200px;
+  height: auto;
+  max-height: 260px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.facility-panel-close {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.operate-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.title {
+  cursor: pointer;
 }

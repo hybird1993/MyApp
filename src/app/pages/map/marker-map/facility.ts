@@ -1,11 +1,11 @@
-export enum DeviceStatus {
+export enum FacilityStatus {
   '正常' = 1,
   '非法开门',
   '电量低',
   '其他'
 }
 
-export enum DeviceType {
+export enum FacilityType {
   '人井' = 1,
   '光交',
   '室外柜',
