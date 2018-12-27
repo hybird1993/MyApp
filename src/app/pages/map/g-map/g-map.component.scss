@@ -1,0 +1,112 @@
+#container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+}
+.facility-type {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.facility-status {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.facility-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 500px;
+  bottom: 10px;
+  z-index: 20;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+  overflow: auto;
+}
+.data-count {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.logic-area {
+  position: absolute;
+  left: 80px;
+  top: 50px;
+  width: 400px;
+  max-height: 260px;
+  height: auto;
+  z-index: 10;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.facility-list {
+  position: absolute;
+  top: 330px;
+  left: 80px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: 400px;
+  max-height: 260px;
+  height: auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.my-collection {
+  position: absolute;
+  top: 50px;
+  left: 500px;
+  z-index: 10;
+  border: 1px solid gray;
+  width: 200px;
+  height: auto;
+  max-height: 260px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+.facility-panel-close {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.operate-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.title {
+  cursor: pointer;
+}

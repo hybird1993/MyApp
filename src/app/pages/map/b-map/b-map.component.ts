@@ -1,24 +1,22 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { points  } from './mock-data';
 import { MapConfig } from './config';
 import { FacilityStatus, FacilityType } from './facility';
 import {CommonUtils} from '../../../core/utils/common-utils';
 
-declare let AMap: any;    // 一定要声明AMap，要不然报错找不到AMap
-declare let BMap: any;
+declare let BMap: any;   // 一定要声明BMap，要不然报错找不到BMap
 declare let BMapLib: any;
 declare const BMAP_NORMAL_MAP: any;
-declare const BMAP_HYBRID_MAP: any;
+declare const BMAP_SATELLITE_MAP: any;
 declare const BMAP_ANCHOR_BOTTOM_RIGHT: any;
 declare const OBMap_ANCHOR_TOP_LEFT: any;
 declare const BMAP_ANCHOR_TOP_LEFT: any;
 
 @Component({
-  selector: 'marker-map',
-  templateUrl: './marker-map.component.html',
-  styleUrls: ['./marker-map.component.scss']
+  selector: 'app-b-map',
+  templateUrl: './b-map.component.html',
+  styleUrls: ['./b-map.component.scss']
 })
-export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BMapComponent implements OnInit, AfterViewInit, OnDestroy {
   cluster = [];
   markers = [];
   map;
@@ -31,18 +29,19 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   statusArr = [];
   DEVICESTATUS = [
     {value: 1, label: '正常', checked: true},
-    {value: 2, label: '非法开门', checked: true},
-    {value: 3, label: '电量低', checked: true},
-    {value: 4, label: '其他', checked: true}
+    {value: 2, label: '离线', checked: true},
+    {value: 3, label: '告警', checked: true}
   ];
   DEVICETYPE = [
-    {value: 1, label: '人井', checked: true},
-    {value: 2, label: '光交', checked: true},
-    {value: 3, label: '室外柜', checked: true},
-    {value: 4, label: '网络柜', checked: true}
+    {value: 1, label: '配架线', checked: true},
+    {value: 2, label: '光缆', checked: true},
+    {value: 3, label: '光交箱', checked: true},
+    {value: 4, label: '人井', checked: true},
+    {value: 5, label: '接头盒', checked: true},
+    {value: 6, label: '分纤箱', checked: true},
   ];
   DATASOURCE = [
-    {value: 0, label: '模拟后台获取'},
+    {value: 100, label: '随机100个点'},
     {value: 500, label: '随机500个点'},
     {value: 5000, label: '随机5000个点'},
     {value: 20000, label: '随机20000个点'},
@@ -66,6 +65,9 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     {value: 'log', label: '日志'},
   ];
   selectedIndex = 0;
+  icon;
+  timer;
+  _markersIdArr = [];
   constructor(
   ) { }
 
@@ -73,13 +75,17 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resetFilter();
     this.initBaiduMap();
     // this.initGaodeMap();
+    this.icon = new BMap.Icon('http://api.map.baidu.com/img/markers.png', new BMap.Size(23, 25), {
+      offset: new BMap.Size(10, 25), // 指定定位位置
+      imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
+    });
   }
 
   ngAfterViewInit() {
     // this.initBaiduMap();
 
     setTimeout(() => {
-      this.dataCount === 0 ? this.addMarkers() : this.addRandomMarks();
+       this.addRandomMarks();
     }, 100);
   }
 
@@ -118,33 +124,6 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
      // this.addBoundary();
   }
 
-  /**
-   * 添加标记点
-   */
-  addMarkers() {
-    const opts = {
-      width : 300,     // 信息窗口宽度
-     // height: 200,     // 信息窗口高度
-      title : '设施情况' , // 信息窗口标题
-    };
-    let markers = [];
-    let pt = null;
-    this._points = points.concat([]);
-    for (let i = 0; i < points.length; i++) {
-      const point = points[i];
-      const l = point['lnglat'];
-      pt = new BMap.Point(...l);
-      const marker = new BMap.Marker(pt);
-      marker.info = point.info;
-     // marker.enableDragging();
-      this.addEventListener(marker);
-      markers.push(marker);
-    }
-    // 最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
-    // console.log(markers);
-    this.map.centerAndZoom(new BMap.Point(116.404, 39.915), MapConfig.defalutZoom);
-    this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {markers: markers, maxZoom: MapConfig.maxZoom}, this.callback);
-  }
 
   /**
    * 随机生成标记点并添加进地图
@@ -154,22 +133,36 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     let markers = [];
     let pt = null;
     let __points = [];
+    const __randomlng = Math.random();
+    const __randomlat = Math.random();
+
+    let _randomlng = __randomlng;
+    let _randomlat = __randomlat;
+    const __times =  Math.ceil((__randomlng + __randomlat) * 10 / 2);
+    let times = __times > 1 ? __times : 1;
     for (let i = 0; i < this.dataCount; i++) {
-      const randomlng = Math.random();
-      const randomlat = Math.random();
+      const randomlng = times < 1 ? Math.random() : _randomlng;
+      const randomlat = times < 1 ? Math.random() : _randomlat;
       const randomType = Math.random();
       const randomStatus = Math.random();
-      const l = [randomlng * 65 + 73, randomlat * 40 + 16];
+      if (times < 1) {
+        const _times = Math.ceil((randomlng + randomlat + randomType + randomStatus) * 10 / 4);
+        times = _times > 1 ? _times : 1;
+      }
+      _randomlng = randomlng;
+      _randomlat = randomlat;
+      times--;
+      const l = [randomlng * 3.8 + 110, randomlat * 2.3 + 30];
       const point = {
         lnglat: l,
         info: {
           id: i,
           name: `${(i + '').padStart(6, '0')}号箱`,
-          type: Math.ceil(randomType * 4),
+          type: Math.ceil(randomType * 6),
           number: (i + '').padStart(6, '0'),
           area: i,
           address: `区域${i}的${(i + '').padStart(6, '0')}号箱的地理位置`,
-          status:  Math.ceil(randomStatus * 4)
+          status:  Math.ceil(randomStatus * 3)
         }
       };
       __points.push(point);
@@ -178,7 +171,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       maxLat = maxLat ? (l[1] > maxLat ?  l[1] : maxLat) : l[1];
       minLat = minLat ? (l[1] < minLat ?  l[1] : minLat) : l[1];
       pt = new BMap.Point(...l);
-      const marker = new BMap.Marker(pt);
+      const marker = new BMap.Marker(pt, {icon: this.icon});
       marker.info = point.info;
       this.addEventListener(marker);
       markers.push(marker);
@@ -188,6 +181,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log(markers);
     this.map.centerAndZoom(new BMap.Point((maxLng + minLng) / 2, (maxLat + minLat) / 2), MapConfig.defalutZoom);
     this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {markers: markers, maxZoom: MapConfig.maxZoom}, this.callback);
+    console.log(this.map);
   }
 
   /**
@@ -199,24 +193,34 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   callback = (event, markers, map) => {
     const marker = new BMap.Point(event.point.lng, event.point.lat);
     const type = event.type;
-    console.log(event);
     if (type === 'onclick') {
-      console.log('onclick');
+     // console.log('onclick');
     } else if (type === 'onmouseover') {
       console.log('onmouseover');
-      // event.stopPropagation();
-      const opts = {
-        width : 300,     // 信息窗口宽度
-        title : '设施情况'  // 信息窗口标题
-      };
-      const infoWindow = new BMap.InfoWindow(this.setContent('c', markers), opts);
-      map.openInfoWindow(infoWindow, marker);
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      if (!this.checkIsOpen(markers)) {
+        const opts = {
+          title : '设施情况', // 信息窗口标题
+          width : 300,     // 信息窗口宽度
+        };
+        const infoWindow = new BMap.InfoWindow(this.setContent('c', markers), opts);
+        map.openInfoWindow(infoWindow, marker);
+        console.log('open');
+      }
     } else if (type === 'onmouseout') {
       console.log('onmouseout');
-      // event.stopPropagation();
-      map.closeInfoWindow();
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this._markersIdArr = [];
+        map.closeInfoWindow();
+        console.log('close');
+      }, 200);
     } else {
-      console.log('未知事件');
+     // console.log('未知事件');
     }
   }
 
@@ -235,8 +239,9 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       <div>区域：${data.area}</div>
       <div>详细地址：${data.address}</div>
       <div>当前状态：${FacilityStatus[data.status]}</div>`;
+      this._markersIdArr.push(data.id);
     } else if (type === 'c') { // 聚合点   数组
-      console.log(data);
+      // console.log(data);
       let obj = {};
       data.forEach(marker => {
         const info = marker.info;
@@ -245,7 +250,9 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
           obj[info.area] = [info];
         }
+        this._markersIdArr.push(info.id);
       });
+     // console.log(this._markersIdArr)
       Object.keys(obj).forEach(key => {
         str += `<div>区域${key}: ${obj[key].length}</div>`;
       });
@@ -253,6 +260,18 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       str = '未知';
     }
     return str;
+  }
+
+  checkIsOpen(data) {
+    let bol = true;
+    data.forEach((marker, index) => {
+      const info = marker.info;
+      bol = bol && info.id === this._markersIdArr[index];
+    });
+    // console.log(data);
+    // console.log([...this._markersIdArr])
+    // console.log(bol);
+    return bol;
   }
 
   /**
@@ -308,7 +327,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
       mapTypes: [
         BMAP_NORMAL_MAP,
-        BMAP_HYBRID_MAP
+        BMAP_SATELLITE_MAP
       ]})
     );
   }
@@ -388,16 +407,12 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * 随机点生成数目裱花
+   * 随机点生成数目改变
    * @param event
    */
   dataCountChange(event) {
     this.markerClusterer.clearMarkers();
-    if (this.dataCount === 0) {
-      this.addMarkers();
-    } else {
-      this.addRandomMarks();
-    }
+    this.addRandomMarks();
     this.resetFilter();
   }
 
@@ -427,7 +442,7 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.typeArr.indexOf(info.type) > -1 && this.statusArr.indexOf(info.status) > -1) {
         const l = this._points[i]['lnglat'];
         pt = new BMap.Point(...l);
-        const marker = new BMap.Marker(pt);
+        const marker = new BMap.Marker(pt , {icon: this.icon});
         marker.info = info;
         // marker.enableDragging();
         this.addEventListener(marker);
@@ -458,6 +473,9 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     target.addEventListener('mouseout', e => {
       this.map.closeInfoWindow(); // 关闭信息窗口
+    });
+    target.addEventListener('mouseenter', e => {
+      console.log('mouseenter');
     });
     target.addEventListener('click', e => {
       this.isShowFacilityPanel = true;
@@ -506,33 +524,5 @@ export class MarkerMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeFacilityPanel() {
     this.isShowFacilityPanel = false;
-  }
-
-  /**
-   * 初始化高德地图
-   */
-  initGaodeMap() {
-    this.map = new AMap.Map('container', {
-      resizeEnable: true,
-      center: [105, 34],
-      zoom: 4
-    });
-    console.log(points.length);
-    for (let i = 0; i < points.length; i++) {
-      this.markers.push(new AMap.Marker({
-        position: points[i]['lnglat'],
-        content: '<div style="background-color: hsla(180, 100%, 50%, 0.7); height: 24px; width: 24px;' +
-        ' border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 1px;"></div>',
-        offset: new AMap.Pixel(-15, -15)
-      }));
-    }
-
-    this.map.plugin(['AMap.ToolBar'], () => {
-      this.map.addControl(new AMap.ToolBar());
-    });
-
-    this.cluster = new AMap.MarkerClusterer(
-      this.map, this.markers, { gridSize: 80}
-    );
   }
 }

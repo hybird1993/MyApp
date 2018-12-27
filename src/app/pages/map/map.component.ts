@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-map',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-
-  constructor() { }
+  isBMap;
+  isGMap;
+  constructor(
+    $router: Router
+  ) { }
 
   ngOnInit() {
+    this.isBMap = localStorage.getItem('isBMap') === 'true';
+    this.isGMap = !this.isBMap;
   }
 
 }

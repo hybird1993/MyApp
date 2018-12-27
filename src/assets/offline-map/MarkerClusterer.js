@@ -594,15 +594,18 @@ var BMapLib = window.BMapLib = BMapLib || {};
     if(thatMap.cb && thatMap.getZoom() >= __maxZoom) {
       var __markers = this._markers;
       this._clusterMarker.addEventListener("mouseover", function(event){
-        // var ev= event||window.event;
-        // if(!isMouseLeaveOrEnter(ev,this)){return false;}
-        console.log(event)
-        console.log(this)
+        //var ev= event||window.event;
+        //if(!isMouseLeaveOrEnter(ev, this)){return false;}
         thatMap.cb(event, __markers, thatMap);
       });
+      this._clusterMarker.addEventListener("mouseenter", function(event){
+        //var ev= event||window.event;
+        //if(!isMouseLeaveOrEnter(ev, this)){return false;}
+        console.log('mouseenter')
+      });
       this._clusterMarker.addEventListener("mouseout", function(event){
-        console.log(event)
-        console.log(this)
+        //var ev= event||window.event;
+        //if(!isMouseLeaveOrEnter(ev, this)){return false;}
         thatMap.cb(event, __markers, thatMap);
       });
       this._clusterMarker.addEventListener("click", function(event){
@@ -658,10 +661,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
   };
 
   function isMouseLeaveOrEnter(e, handler) {
+    console.log(e);
+    console.log(handler)
     if (e.type != 'onmouseout' && e.type != 'onmouseover') return false;
-    var reltg = e.relatedTarget ? e.relatedTarget : e.type == 'onmouseout' ? e.toElement : e.fromElement;
-    while (reltg && reltg != handler)
-      reltg = reltg.parentNode;
+    var reltg = e.currentTarget;
     return (reltg != handler);
   }
 })();
