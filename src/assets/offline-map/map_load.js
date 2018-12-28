@@ -39,6 +39,7 @@ bmapcfg.home = JS__FILE__.substr(0, JS__FILE__.lastIndexOf("/")+1); //地图API�
   } else if (!isBMap && !offline) {  // 谷歌在线地图
     document.write('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGwT3XelPA7xS3wtyOekwZ6RKCJKV_GKM"> </script>');
     document.write('<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>');
+    // document.write('<script src="'+bmapcfg.home + 'g_markerClusterer.js"></script>');
 
    } else {  // 谷歌离线地图
 

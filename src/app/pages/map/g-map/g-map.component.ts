@@ -2,6 +2,8 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from
 import { MapConfig } from './config';
 import { FacilityStatus, FacilityType } from './facility';
 import {CommonUtils} from '../../../core/utils/common-utils';
+import {BMap, BMapLib} from '../b-map/b-map.component';
+import {data} from './data'
 
 declare let google: any;
 declare let MarkerClusterer: any;
@@ -41,6 +43,8 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
     {value: 20000, label: '随机20000个点'},
     {value: 50000, label: '随机50000个点'},
     {value: 100000, label: '随机100000个点'},
+    {value: 200000, label: '随机200000个点'},
+    {value: 300000, label: '随机300000个点'},
   ];
   dataCount = MapConfig.randomMarkersNum;
   _points;
@@ -62,25 +66,26 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
   icon;
   timer;
   _markersIdArr = [];
+  flightPath;
   constructor(
   ) { }
 
   ngOnInit() {
-    this.resetFilter();
-    this.initGoogleMap();
-    this.map.addListener('zoom_changed', () => {
-      console.log(this.map.getZoom());
-    });
-
-    this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(
-      document.querySelector('.zoom-control'));
+    // this.resetFilter();
+    // this.initGoogleMap();
+    // this.map.addListener('zoom_changed', () => {
+    //   console.log(this.map.getZoom());
+    // });
+    // const imageUrl = `https://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png`;
+    // this.icon = new google.maps.MarkerImage(imageUrl, new google.maps.Size(24, 32));
+    this.mockData();
   }
 
   ngAfterViewInit() {
 
-    setTimeout(() => {
-       // this.addRandomMarks();
-    }, 100);
+    // setTimeout(() => {
+      // this.addRandomMarks();
+    // }, 100);
   }
 
   ngOnDestroy() {
@@ -88,74 +93,104 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cluster = [];
   }
 
+  mockData() {
+    let center = new google.maps.LatLng(37.4419, -122.1419);
+
+    let map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 3,
+      center: center,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    let markers = [];
+    for (let i = 0; i < 100; i++) {
+      let dataPhoto = data.photos[i];
+      let latLng = new google.maps.LatLng(dataPhoto.latitude,
+        dataPhoto.longitude);
+      let marker = new google.maps.Marker({
+        position: latLng
+      });
+      markers.push(marker);
+    }
+    console.log(markers)
+    const imgPath = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
+    let markerCluster = new MarkerClusterer(map, markers, {
+      averageCenter: true, imagePath: imgPath
+    });
+
+    google.maps.event.addListener(markerCluster, 'click', function (c) {
+      console.log('click');
+    });
+    google.maps.event.addListener(markerCluster, 'mouseover', function (c) {
+      console.log('mouseover');
+    });
+    google.maps.event.addListener(markerCluster, 'mouseout', function (c) {
+      console.log('mouseout');
+    });
+    console.log(markerCluster);
+
+  }
+
   /**
    * 初始化谷歌地图
    */
   initGoogleMap() {
     const locations = [
-      {lat: -31.563910, lng: 147.154312},
-      {lat: -33.718234, lng: 150.363181},
-      {lat: -33.727111, lng: 150.371124},
-      {lat: -33.848588, lng: 151.209834},
-      {lat: -33.851702, lng: 151.216968},
-      {lat: -34.671264, lng: 150.863657},
-      {lat: -35.304724, lng: 148.662905},
-      {lat: -36.817685, lng: 175.699196},
-      {lat: -36.828611, lng: 175.790222},
-      {lat: -37.750000, lng: 145.116667},
-      {lat: -37.759859, lng: 145.128708},
-      {lat: -37.765015, lng: 145.133858},
-      {lat: -37.770104, lng: 145.143299},
-      {lat: -37.773700, lng: 145.145187},
-      {lat: -37.774785, lng: 145.137978},
-      {lat: -37.819616, lng: 144.968119},
-      {lat: -38.330766, lng: 144.695692},
-      {lat: -39.927193, lng: 175.053218},
-      {lat: -41.330162, lng: 174.865694},
-      {lat: -42.734358, lng: 147.439506},
-      {lat: -42.734358, lng: 147.501315},
-      {lat: -42.735258, lng: 147.438000},
+      {lat: -43.999792, lng: 170.463352},
+      {lat: -43.999792, lng: 170.463352},
       {lat: -43.999792, lng: 170.463352}
     ];
-    this.map = new google.maps.Map(document.getElementById('container'), {
-      zoom: 3,
-      center: {lat: -28.024, lng: 140.887}
-    });
-    const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-    // Add some markers to the map.
-    // Note: The code uses the JavaScript Array.prototype.map() method to
-    // create an array of markers based on a given "locations" array.
-    // The map() method here has nothing to do with the Google Maps API.
-    const markers = locations.map(function(location, i) {
-      return new google.maps.Marker({
-        position: location,
-        label: labels[i % labels.length]
-      });
+    this.map = new google.maps.Map(document.getElementById('map'), {
+      zoom:  MapConfig.defalutZoom,
+      center: {lat: -28.024, lng: 140.887},
+      mapTypeControl: true,
+      mapTypeControlOptions: {
+        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+        position: google.maps.ControlPosition.TOP_RIGHT
+      },
+      zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_CENTER
+      },
+      scaleControl: true,
+      streetViewControl: false,
+      streetViewControlOptions: {
+        position: google.maps.ControlPosition.LEFT_TOP
+      },
+      fullscreenControl: false
     });
 
     // Add a marker clusterer to manage the markers.
-    const markerCluster = new MarkerClusterer(this.map, markers,
-      {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    // const markerCluster = new MarkerClusterer(this.map, markers,
+    //   {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    // google.maps.event.addListener(markerCluster, 'click', function (c) {
+    //   console.log('click');
+    //   const m = c.getMarkers();
+    //   const p = [];
+    //   for (let i = 0; i < m.length; i++ ) {
+    //     p.push(m[i].getPosition());
+    //   }
+    //   console.log(p);
+    // });
+    // google.maps.event.addListener(markerCluster, 'mouseover', function (c) {
+    //   console.log('mouseover');
+    //   const m = c.getMarkers();
+    //   const p = [];
+    //   for (let i = 0; i < m.length; i++ ) {
+    //     p.push(m[i].getPosition());
+    //   }
+    // });
+    // google.maps.event.addListener(markerCluster, 'mouseout', function (c) {
+    //   console.log('mouseover');
+    //   const m = c.getMarkers();
+    //   const p = [];
+    //   for (let i = 0; i < m.length; i++ ) {
+    //     p.push(m[i].getPosition());
+    //   }
+    // });
 
-  }
+    // this.addLine();
 
-  initMapTypeControl() {
-    const mapTypeControlDiv = document.querySelector('.maptype-control');
-    // document.querySelector('.maptype-control-map').onclick = function() {
-    //   mapTypeControlDiv.classList.add('maptype-control-is-map');
-    //   mapTypeControlDiv.classList.remove('maptype-control-is-satellite');
-    //   this.map.setMapTypeId('roadmap');
-    // };
-    // document.querySelector('.maptype-control-satellite').onclick =
-    //   function() {
-    //     mapTypeControlDiv.classList.remove('maptype-control-is-map');
-    //     mapTypeControlDiv.classList.add('maptype-control-is-satellite');
-    //     this.map.setMapTypeId('hybrid');
-    //   };
-
-    this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
-      mapTypeControlDiv);
   }
 
   /**
@@ -185,7 +220,7 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
       _randomlng = randomlng;
       _randomlat = randomlat;
       times--;
-      const l = [randomlng * 3.8 + 110, randomlat * 2.3 + 30];
+      const l = [randomlat * 2.3 + 30, randomlng * 3.8 + 110];
       const point = {
         lnglat: l,
         info: {
@@ -203,11 +238,45 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
       minLng = minLng ? (l[0] < maxLng ?  l[0] : minLng) : l[0];
       maxLat = maxLat ? (l[1] > maxLat ?  l[1] : maxLat) : l[1];
       minLat = minLat ? (l[1] < minLat ?  l[1] : minLat) : l[1];
+      pt = new google.maps.LatLng(...l);
+      // , icon: this.icon
+      const marker = new google.maps.Marker({position: pt});
+     // this.addEventListener(marker);
+      markers.push(marker);
     }
+    console.log(markers);
     this._points = __points.concat([]);
-    // 最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
-    // console.log(markers);
+    const imgPath = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
+    this.markerClusterer = new MarkerClusterer(this.map, markers, { averageCenter: true, imagePath: imgPath});
+    this.map.setCenter(new google.maps.LatLng( (maxLng + minLng) / 2, (maxLat + minLat) / 2));
+    google.maps.event.addListener(this.markerClusterer, 'click', function (c) {
+      console.log('click');
+      const m = c.getMarkers();
+      const p = [];
+      for (let i = 0; i < m.length; i++ ) {
+        p.push(m[i].getPosition());
+      }
+      console.log(p);
+    });
+    google.maps.event.addListener(this.markerClusterer, 'mouseover', function (c) {
+      console.log('mouseover');
+      const m = c.getMarkers();
+      const p = [];
+      for (let i = 0; i < m.length; i++ ) {
+        p.push(m[i].getPosition());
+      }
+    });
+    google.maps.event.addListener(this.markerClusterer, 'mouseout', function (c) {
+      console.log('mouseover');
+      const m = c.getMarkers();
+      const p = [];
+      for (let i = 0; i < m.length; i++ ) {
+        p.push(m[i].getPosition());
+      }
+    });
 
+
+    console.log(this.markerClusterer);
   }
 
 
@@ -266,7 +335,25 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
    * 添加连线
    */
   addLine() {
+    const flightPlanCoordinates = [
+      {lat: 37.772, lng: -122.214},
+      {lat: 21.291, lng: -157.821},
+      {lat: -18.142, lng: 178.431},
+      {lat: -27.467, lng: 153.027}
+    ];
+    this.flightPath = new google.maps.Polyline({
+      path: flightPlanCoordinates,
+      geodesic: true,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
 
+    this.flightPath.setMap(this.map);
+  }
+
+  removeLine() {
+    this.flightPath.setMap(null);
   }
 
   /**

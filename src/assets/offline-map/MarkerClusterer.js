@@ -596,11 +596,15 @@ var BMapLib = window.BMapLib = BMapLib || {};
       this._clusterMarker.addEventListener("mouseover", function(event){
         //var ev= event||window.event;
         //if(!isMouseLeaveOrEnter(ev, this)){return false;}
+        window.event.preventDefault();
+        window.event.stopPropagation();
         thatMap.cb(event, __markers, thatMap);
       });
       this._clusterMarker.addEventListener("mouseenter", function(event){
         //var ev= event||window.event;
         //if(!isMouseLeaveOrEnter(ev, this)){return false;}
+        window.event.preventDefault();
+        window.event.stopPropagation();
         console.log('mouseenter')
       });
       this._clusterMarker.addEventListener("mouseout", function(event){

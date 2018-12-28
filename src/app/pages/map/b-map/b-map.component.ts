@@ -47,6 +47,8 @@ export class BMapComponent implements OnInit, AfterViewInit, OnDestroy {
     {value: 20000, label: '随机20000个点'},
     {value: 50000, label: '随机50000个点'},
     {value: 100000, label: '随机100000个点'},
+    {value: 200000, label: '随机200000个点'},
+    {value: 300000, label: '随机300000个点'},
   ];
   dataCount = MapConfig.randomMarkersNum;
   _points;
@@ -173,14 +175,15 @@ export class BMapComponent implements OnInit, AfterViewInit, OnDestroy {
       pt = new BMap.Point(...l);
       const marker = new BMap.Marker(pt, {icon: this.icon});
       marker.info = point.info;
-      this.addEventListener(marker);
+     // this.addEventListener(marker);
       markers.push(marker);
     }
     this._points = __points.concat([]);
     // 最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
     // console.log(markers);
     this.map.centerAndZoom(new BMap.Point((maxLng + minLng) / 2, (maxLat + minLat) / 2), MapConfig.defalutZoom);
-    this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {markers: markers, maxZoom: MapConfig.maxZoom}, this.callback);
+   // this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {markers: markers, maxZoom: MapConfig.maxZoom}, this.callback);
+    this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {markers: markers, maxZoom: MapConfig.maxZoom});
     console.log(this.map);
   }
 
@@ -197,10 +200,10 @@ export class BMapComponent implements OnInit, AfterViewInit, OnDestroy {
      // console.log('onclick');
     } else if (type === 'onmouseover') {
       console.log('onmouseover');
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
-      if (!this.checkIsOpen(markers)) {
+      // if (this.timer) {
+      //   clearTimeout(this.timer);
+      // }
+      // if (!this.checkIsOpen(markers)) {
         const opts = {
           title : '设施情况', // 信息窗口标题
           width : 300,     // 信息窗口宽度
@@ -208,17 +211,17 @@ export class BMapComponent implements OnInit, AfterViewInit, OnDestroy {
         const infoWindow = new BMap.InfoWindow(this.setContent('c', markers), opts);
         map.openInfoWindow(infoWindow, marker);
         console.log('open');
-      }
+      // }
     } else if (type === 'onmouseout') {
       console.log('onmouseout');
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
-      this.timer = setTimeout(() => {
+      // if (this.timer) {
+      //   clearTimeout(this.timer);
+      // }
+      // this.timer = setTimeout(() => {
         this._markersIdArr = [];
         map.closeInfoWindow();
-        console.log('close');
-      }, 200);
+        // console.log('close');
+      // }, 200);
     } else {
      // console.log('未知事件');
     }
