@@ -2,8 +2,6 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from
 import { MapConfig } from './config';
 import { FacilityStatus, FacilityType } from './facility';
 import {CommonUtils} from '../../../core/utils/common-utils';
-import {BMap, BMapLib} from '../b-map/b-map.component';
-import {data} from './data'
 
 declare let google: any;
 declare let MarkerClusterer: any;
@@ -37,6 +35,7 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
     {value: 6, label: '分纤箱', checked: true},
   ];
   DATASOURCE = [
+    {value: 1, label: '随机1个点'},
     {value: 100, label: '随机100个点'},
     {value: 500, label: '随机500个点'},
     {value: 5000, label: '随机5000个点'},
@@ -67,25 +66,25 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
   timer;
   _markersIdArr = [];
   flightPath;
+  infoWindow;
   constructor(
   ) { }
 
   ngOnInit() {
-    // this.resetFilter();
-    // this.initGoogleMap();
-    // this.map.addListener('zoom_changed', () => {
-    //   console.log(this.map.getZoom());
-    // });
-    // const imageUrl = `https://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png`;
-    // this.icon = new google.maps.MarkerImage(imageUrl, new google.maps.Size(24, 32));
-    this.mockData();
+    this.resetFilter();
+    this.initGoogleMap();
+    this.map.addListener('zoom_changed', () => {
+      console.log(this.map.getZoom());
+    });
+    const imageUrl = `https://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png`;
+    this.icon = new google.maps.MarkerImage(imageUrl, new google.maps.Size(24, 32));
   }
 
   ngAfterViewInit() {
 
-    // setTimeout(() => {
-      // this.addRandomMarks();
-    // }, 100);
+    setTimeout(() => {
+      this.addRandomMarks();
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -93,56 +92,13 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cluster = [];
   }
 
-  mockData() {
-    let center = new google.maps.LatLng(37.4419, -122.1419);
-
-    let map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 3,
-      center: center,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-
-    let markers = [];
-    for (let i = 0; i < 100; i++) {
-      let dataPhoto = data.photos[i];
-      let latLng = new google.maps.LatLng(dataPhoto.latitude,
-        dataPhoto.longitude);
-      let marker = new google.maps.Marker({
-        position: latLng
-      });
-      markers.push(marker);
-    }
-    console.log(markers)
-    const imgPath = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
-    let markerCluster = new MarkerClusterer(map, markers, {
-      averageCenter: true, imagePath: imgPath
-    });
-
-    google.maps.event.addListener(markerCluster, 'click', function (c) {
-      console.log('click');
-    });
-    google.maps.event.addListener(markerCluster, 'mouseover', function (c) {
-      console.log('mouseover');
-    });
-    google.maps.event.addListener(markerCluster, 'mouseout', function (c) {
-      console.log('mouseout');
-    });
-    console.log(markerCluster);
-
-  }
-
   /**
    * 初始化谷歌地图
    */
   initGoogleMap() {
-    const locations = [
-      {lat: -43.999792, lng: 170.463352},
-      {lat: -43.999792, lng: 170.463352},
-      {lat: -43.999792, lng: 170.463352}
-    ];
     this.map = new google.maps.Map(document.getElementById('map'), {
       zoom:  MapConfig.defalutZoom,
-      center: {lat: -28.024, lng: 140.887},
+      center: {lat: 30, lng: 120},
       mapTypeControl: true,
       mapTypeControlOptions: {
         style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -159,36 +115,6 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       fullscreenControl: false
     });
-
-    // Add a marker clusterer to manage the markers.
-    // const markerCluster = new MarkerClusterer(this.map, markers,
-    //   {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-    // google.maps.event.addListener(markerCluster, 'click', function (c) {
-    //   console.log('click');
-    //   const m = c.getMarkers();
-    //   const p = [];
-    //   for (let i = 0; i < m.length; i++ ) {
-    //     p.push(m[i].getPosition());
-    //   }
-    //   console.log(p);
-    // });
-    // google.maps.event.addListener(markerCluster, 'mouseover', function (c) {
-    //   console.log('mouseover');
-    //   const m = c.getMarkers();
-    //   const p = [];
-    //   for (let i = 0; i < m.length; i++ ) {
-    //     p.push(m[i].getPosition());
-    //   }
-    // });
-    // google.maps.event.addListener(markerCluster, 'mouseout', function (c) {
-    //   console.log('mouseover');
-    //   const m = c.getMarkers();
-    //   const p = [];
-    //   for (let i = 0; i < m.length; i++ ) {
-    //     p.push(m[i].getPosition());
-    //   }
-    // });
-
     // this.addLine();
 
   }
@@ -221,53 +147,56 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
       _randomlat = randomlat;
       times--;
       const l = [randomlat * 2.3 + 30, randomlng * 3.8 + 110];
+      const lat = randomlat * 2.3 + 30,  lng = randomlng * 3.8 + 110;
       const point = {
-        lnglat: l,
-        info: {
           id: i,
+          lat: lat,
+          lng: lng,
           name: `${(i + '').padStart(6, '0')}号箱`,
           type: Math.ceil(randomType * 6),
           number: (i + '').padStart(6, '0'),
           area: i,
           address: `区域${i}的${(i + '').padStart(6, '0')}号箱的地理位置`,
           status:  Math.ceil(randomStatus * 3)
-        }
       };
       __points.push(point);
-      maxLng = maxLng ? (l[0] > maxLng ?  l[0] : maxLng) : l[0];
-      minLng = minLng ? (l[0] < maxLng ?  l[0] : minLng) : l[0];
-      maxLat = maxLat ? (l[1] > maxLat ?  l[1] : maxLat) : l[1];
-      minLat = minLat ? (l[1] < minLat ?  l[1] : minLat) : l[1];
-      pt = new google.maps.LatLng(...l);
+      maxLng = maxLng ? (lng > maxLng ? lng : maxLng) : lng;
+      minLng = minLng ? (lng < maxLng ? lng : minLng) : lng;
+      maxLat = maxLat ? (lat > maxLat ? lat : maxLat) : lat;
+      minLat = minLat ? (lat < minLat ? lat : minLat) : lat;
+      pt = new google.maps.LatLng(lat, lng);
       // , icon: this.icon
-      const marker = new google.maps.Marker({position: pt});
-     // this.addEventListener(marker);
+      const marker = new google.maps.Marker({position: {lat, lng}, info: point});
+      this.addEventListener(marker);
       markers.push(marker);
     }
     console.log(markers);
     this._points = __points.concat([]);
     const imgPath = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
     this.markerClusterer = new MarkerClusterer(this.map, markers, { averageCenter: true, imagePath: imgPath});
-    this.map.setCenter(new google.maps.LatLng( (maxLng + minLng) / 2, (maxLat + minLat) / 2));
+   // this.map.setCenter(new google.maps.LatLng( (maxLng + minLng) / 2, (maxLat + minLat) / 2));
     google.maps.event.addListener(this.markerClusterer, 'click', function (c) {
       console.log('click');
       const m = c.getMarkers();
-      const p = [];
-      for (let i = 0; i < m.length; i++ ) {
-        p.push(m[i].getPosition());
-      }
-      console.log(p);
+      console.log(m);
     });
-    google.maps.event.addListener(this.markerClusterer, 'mouseover', function (c) {
+    google.maps.event.addListener(this.markerClusterer, 'mouseover', c => {
       console.log('mouseover');
       const m = c.getMarkers();
-      const p = [];
-      for (let i = 0; i < m.length; i++ ) {
-        p.push(m[i].getPosition());
-      }
+      const contentString = this.setContent('c', m);
+      const infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+      // infowindow.open(this.map, new google.maps.LatLng(c.getCenter()));
+      const marker_ = new google.maps.Marker({
+        draggable: true,
+        position: new google.maps.LatLng(30, 110),
+        visible: true
+      });
+      infowindow.open(this.map, marker_);
     });
     google.maps.event.addListener(this.markerClusterer, 'mouseout', function (c) {
-      console.log('mouseover');
+      console.log('mouseout');
       const m = c.getMarkers();
       const p = [];
       for (let i = 0; i < m.length; i++ ) {
@@ -288,6 +217,7 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
    * @returns {any}
    */
   setContent(type, data) {
+
     let str = '';
     if (type === 'm') { // 覆盖物
       str = `<div>设施名称：${data.name}</div>
@@ -462,22 +392,34 @@ export class GMapComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param target
    */
   addEventListener(target) {
-    target.addEventListener('dragend', e => {
-      console.log('当前位置：' + e.point.lng + ',' + e.point.lat);
-    }, {capture: true, passive: true});
-    target.addEventListener('mouseover', e => {
-
+    //
+    google.maps.event.addListener(target, 'dragend', e => {
+      console.log('当前位置：' + target.info.lng + ',' + target.info.lat);
     });
-    target.addEventListener('mouseout', e => {
-      this.map.closeInfoWindow(); // 关闭信息窗口
-    });
-    target.addEventListener('mouseenter', e => {
-      console.log('mouseenter');
-    });
-    target.addEventListener('click', e => {
+    google.maps.event.addListener(target, 'click', e => {
+      console.log('当前位置：' + target.info.lng + ',' + target.info.lat);
       this.isShowFacilityPanel = true;
-
     });
+    google.maps.event.addListener(target, 'mouseover', e => {
+      console.log('当前位置：' + target.info.lng + ',' + target.info.lat);
+      this.openInfoWindow(target);
+    });
+    google.maps.event.addListener(target, 'mouseout', e => {
+      console.log('当前位置：' + target.info.lng + ',' + target.info.lat);
+      this.closeInfoWindow();
+    });
+  }
+
+  openInfoWindow(target) {
+    const content = this.setContent('m', target.info);
+    this.infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+    this.infoWindow.open(this.map, target);
+  }
+
+  closeInfoWindow() {
+    this.infoWindow.close(); // 关闭信息窗口
   }
 
   /**

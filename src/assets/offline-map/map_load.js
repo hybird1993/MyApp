@@ -35,11 +35,11 @@ bmapcfg.home = JS__FILE__.substr(0, JS__FILE__.lastIndexOf("/")+1); //地图API�
     document.write('<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=ZczWHZo66FceT4MYuVkK4kY3"></script>');
     document.write('<script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>');
    // document.write('<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>');
-    document.write('<script type="text/javascript" src="'+bmapcfg.home + 'MarkerClusterer.js"></script>');
+    document.write('<script type="text/javascript" src='+bmapcfg.home + '"b_markerClusterer.js"></script>');
   } else if (!isBMap && !offline) {  // 谷歌在线地图
     document.write('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGwT3XelPA7xS3wtyOekwZ6RKCJKV_GKM"> </script>');
-    document.write('<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>');
-    // document.write('<script src="'+bmapcfg.home + 'g_markerClusterer.js"></script>');
+    // document.write('<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>');
+    document.write('<script src="'+bmapcfg.home + 'g_markerClusterer_min.js"></script>');
 
    } else {  // 谷歌离线地图
 
